@@ -124,7 +124,7 @@ If you've included non-public bundles, the test will fail, but it should report 
 
 A cache of existing images (`verified_coordinates`) is used to keep the execution time down for large catalogs. Don't commit this file to git if you happen to run the script locally.
 
-It is a good idea to setup a github workflow to test each commit with this script. You also probably want to configure GitHub to make this check block the merge of a PR.
+It is a good idea to setup a github workflow to test each commit with this script, [see this example](https://github.com/rhbk/rhbk-fbc/blob/main/.github/workflows/verify-catalog.yaml). You also probably want to configure GitHub to make this check block the merge of a PR, which can be done though branch protection settings.
 
 ## Updating and releasing the catalog
 
