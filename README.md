@@ -2,7 +2,7 @@
 
 This is a collection of scripts that will help you to manage a File-Based Catalog (FBC) that will be used by the Operator Lifecycle Manager (OLM) in OpenShift to update your operator.
 
-Some parts of this toolset will only make sense if you're building your FBC through Konflux, but in theory most of it is build-system independent. Another assumption is that your container images are eventually published through the Red Hat Container Ecosystem registry (`registry.redhat.io`).
+Some parts of this toolset will only make sense if you're building your FBC through Konflux, but in theory most of it is build-system independent. Another assumption is that your container images are eventually published through the Red Hat Container Ecosystem registry (`registry.redhat.io`). Semantic versioning is the only offered mode currently, but others are available.
 
 The current state of things is a bit rough. The scripts were developed for [RHBK product](https://github.com/rhbk/rhbk-fbc)'s use with an eye to making them generally useful, but they may not fit your exact purpose unless it's identical to RHBK's. Pull Requests are welcome!
 
