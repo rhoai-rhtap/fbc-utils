@@ -89,9 +89,10 @@ IFS=$'\t' read -r bundle_reg_from bundle_reg_to < <(yq -e -o tsv ea '.replacemen
 
 # opm will need to access the images in this registry to do its work
 # https://source.redhat.com/groups/public/teamnado/wiki/brew_registry#obtaining-registry-tokens
-if ! skopeo login --get-login "$bundle_reg_from" >/dev/null
+registry="$(cut -f1 -d/ <<<"$bundle_reg_from")"
+if ! skopeo login --get-login "$registry" >/dev/null
 then
-    echo "Login to $(cut -f1 -d/ <<<"$bundle_reg_from") before running this script" >&2
+    echo "Login to $registry before running this script" >&2
     exit 125
 fi
 
