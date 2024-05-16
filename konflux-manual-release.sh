@@ -34,4 +34,4 @@ done < <(
         jq -r --arg commit "$commit" '.items | .[] | select(.metadata.annotations."build.appstudio.redhat.com/commit_sha" == $commit) | .metadata.name'
 )
 
-echo "=> Done, review and if ok, then run: oc apply -f --kubeconfig=$HOME/.kube/konflux-kubeconfig-yourproduct.yaml -f $tmp_dir"
+echo "=> Done, review and if ok, then run: oc apply --kubeconfig=$HOME/.kube/konflux-kubeconfig-yourproduct.yaml -f $tmp_dir"
