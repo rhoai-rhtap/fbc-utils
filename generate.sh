@@ -190,7 +190,7 @@ then
     while read -r catalog
     do
         previous_first_entry_name=""
-        while read -r name first_entry_name
+        while IFS=$'\t' read -r name first_entry_name
         do
             if [ -n "$previous_first_entry_name" ]
             then
