@@ -180,6 +180,32 @@ do
     mv "rhbk-operator" "catalog/$ocp_ver/"
 done
 
+# Optionally, add a skipRange relationship between the first version in a
+# channel and all prior versions in the previous channel. This allows automatic
+# upgrades between major versions when the channels go stable-v22, stable-v24,
+# etc. This won't do anything if there's only one channel so far.
+if yq -e e '.upgrade.between_major' "$cfg" 2>/dev/null | grep -qi 'skipRange'
+then
+    echo "-> Major version upgrade fix (skipRange)" >&2
+    while read -r catalog
+    do
+        previous_first_entry_name=""
+        while read -r name first_entry_name
+        do
+            if [ -n "$previous_first_entry_name" ]
+            then
+                # ex: rhbk-operator.v24.0.3-opr.1 -> 24.0.3-opr.1
+                low_ver="$(cut -d. -f2- <<<"$previous_first_entry_name" | sed 's/^v//')"
+                high_ver="$(cut -d. -f2- <<<"$first_entry_name" | sed 's/^v//')"
+                skip_range=">=$low_ver <$high_ver"
+
+                n="$name" r="$skip_range" yq -ei e 'select(.schema == "olm.channel" and .name == strenv(n)).entries[0].skipRange = strenv(r)' "$catalog"
+            fi
+            previous_first_entry_name="$first_entry_name"
+        done < <(yq -o tsv -e e 'select(.schema == "olm.channel" and (.name | contains("stable-"))) | [.name, .entries[0].name]' "$catalog")
+    done < <(find catalog/ -type f -name 'catalog.yaml')
+fi
+
 echo "-> Dockerfiles + devfiles" >&2
 for ocp_ver in "${ocp_versions[@]}"
 do
