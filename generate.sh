@@ -199,7 +199,7 @@ then
                 high_ver="$(cut -d. -f2- <<<"$first_entry_name" | sed 's/^v//')"
                 skip_range=">=$low_ver <$high_ver"
 
-                n="$name" r="$skip_range" yq -ei e 'select(.schema == "olm.channel" and .name == strenv(n)).entries[0].skipRange = strenv(r)' "$catalog"
+                n="$name" r="$skip_range" yq -ei e 'select(.schema == "olm.channel" and .name == strenv(n)).entries[-1].skipRange = strenv(r)' "$catalog"
             fi
             previous_first_entry_name="$first_entry_name"
         done < <(yq -o tsv -e e 'select(.schema == "olm.channel" and (.name | contains("stable-"))) | [.name, .entries[0].name]' "$catalog")
