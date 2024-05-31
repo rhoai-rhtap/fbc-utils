@@ -124,7 +124,19 @@ If you've included non-public bundles, the test will fail, but it should report 
 
 A cache of existing images (`verified_coordinates`) is used to keep the execution time down for large catalogs. Don't commit this file to git if you happen to run the script locally.
 
+#### GitHub PR Check
+
 It is a good idea to setup a github workflow to test each commit with this script, [see this example](https://github.com/rhbk/rhbk-fbc/blob/main/.github/workflows/verify-catalog.yaml). You also probably want to configure GitHub to make this check block the merge of a PR, which can be done though branch protection settings.
+
+### Testing the catalog in OLM
+
+The catalog is the primary input into Operator Lifecycle Manager (OLM), it's the "operator operator" inside OpenShift. Since the catalog is a complex thing, a technically valid catalog doesn't always result in the behaviour you intended, when OLM goes to use it. So, integration tests are a good idea!
+
+`./verify-olm.sh` provides a relatively fast way to check that your operator can be installed and upgraded with your fragment index image. It isn't exhaustive, more of a "smoke test", but it should catch the most obvious bugs.
+
+Call it with one parameter, the coordinate of your index image, probably in quay.io. Do not supply anything more than a fragment, as the test automatically detects the name of your operator from the index image itself, and if multiple operators are present that won't work.
+
+The script uses Kubernetes IN Docker (KIND), with OLM installed, to emulate an OpenShift environment. This seems accurate enough for this purpose, but may not catch everything. Internal images are supported, via brew.registry.redhat.io. You must supply credentials via environment variable. Obtaining those is outlined in the "Generate your FBC files" section, above. It is assumed that your local container system is podman, not docker.
 
 ## Updating and releasing the catalog
 
