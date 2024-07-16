@@ -116,14 +116,14 @@ EOF
 echo "=> Generating catalog for $operator_name" >&2
 
 echo "-> opm render" >&2
-# TODO: Hacked for opm 1.27.1, restore when IIB fixed
+mkdir "$operator_name"
+opm alpha render-template semver -o yaml semver-template.yaml > "$operator_name/catalog.yaml"
 for ocp_ver in "${ocp_versions[@]}"
 do
     mkdir -p "catalog/$ocp_ver/"
-    mkdir $operator_name
-    opm alpha render-template semver -o yaml semver-template.yaml > $operator_name/catalog.yaml
-    mv $operator_name "catalog/$ocp_ver/"
+    cp -r "$operator_name" "catalog/$ocp_ver/"
 done
+rm -rf "$operator_name"
 
 # Optionally, add a skipRange relationship between the first version in a
 # channel and all prior versions in the previous channel. This allows automatic
