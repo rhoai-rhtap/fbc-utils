@@ -152,7 +152,6 @@ then
 fi
 
 echo "-> Dockerfiles" >&2
-{
 for ocp_ver in "${ocp_versions[@]}"
 do
     mkdir -p catalog/$ocp_ver
@@ -168,12 +167,26 @@ do
         ocp_image_name="ose-operator-registry-rhel9"
     fi
 
-    opm generate dockerfile --binary-image registry.redhat.io/openshift4/$ocp_image_name:$ocp_ver $operator_name
-    mv $operator_name.Dockerfile Dockerfile
+    cat > Dockerfile <<EOF
+# The base image is expected to contain
+# /bin/opm (with a serve subcommand) and /bin/grpc_health_probe
+FROM registry.redhat.io/openshift4/$ocp_image_name:$ocp_ver
+
+# Configure the entrypoint and command
+ENTRYPOINT ["/bin/opm"]
+CMD ["serve", "/configs", "--cache-dir=/tmp/cache"]
+
+# Copy declarative config root into image at /configs and pre-populate serve cache
+ADD $operator_name /configs/$operator_name
+RUN ["/bin/opm", "serve", "/configs", "--cache-dir=/tmp/cache", "--cache-only"]
+
+# Set DC-specific label for the location of the DC root directory
+# in the image
+LABEL operators.operatorframework.io.index.configs.v1=/configs
+EOF
 
     popd
 done
-}
 
 echo "-> Replacing registries" >&2
 # This step is required because opm doesn't support registry mirrors, and must
