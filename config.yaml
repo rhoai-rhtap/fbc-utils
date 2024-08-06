@@ -1,0 +1,28 @@
+name: rhods-operator
+repository: rhoai/odh-operator-bundle
+konflux:
+  namespace: rhoai-tenant
+  prefix: rhoai
+  github: rhoai-rhtap/rhods-operator
+ocp:
+  - v4.13
+  - v4.14
+  - v4.15
+replacements:
+  - from: brew.registry.redhat.io/rh-osbs/managed-open-data-hub-odh-operator-bundle-rhel8
+    to: registry.redhat.io/rhoai/odh-operator-bundle
+  - from: brew.registry.redhat.io/rh-osbs/managed-open-data-hub-odh-rhel8-operator
+    to: registry.redhat.io/rhoai/odh-rhel8-operator
+  - from: brew.registry.redhat.io/rh-osbs/managed-open-data-hub-odh-dashboard-rhel8
+    to: registry.redhat.io/rhoai/odh-dashboard-rhel8
+bundles:
+  - sha256:f54a941b4bf49ece4f0c28f3b0618307d67c31739fec33271ee091f838bddfc8
+  - sha256:74798dc367493e692e8ea24553641e564820fbdf76016e6b457d6900e439abba
+  - sha256:51bd700fcf37b39017fedf24655be77edfb03da3769c27db2351b3295bd5c144
+  - sha256:c078ec5482589ec007b3215d5e39cdc38ac8dfa247ab22883e25f96ecbc421b5
+  - sha256:387dc98a50accf0aa4b1f25181532d30cc91cc0db6bac5d769becb6330a2f804
+  - sha256:3f8ad1085aeb45513994255539a501ff92a103ea66a80c37ae05d9c478fa769d
+  - sha256:16c6e2ae736eb9b365d9c8ae56953a6aef16ca198172a747bb89c1c1a3849ba2
+  - sha256:a856145f24a3a968c25e7f4762374bc59dfd79c2f6e958a7010a8f6d1d835af8
+  - sha256:63c246a03a1a8b813f965ffeea41db327a9089655c62e5923ad68b491f4bfaa6
+  - sha256:e53aa3f343e365b3b32f86ab37a2c4780a46aa50c15df98626205d66ec7f90de

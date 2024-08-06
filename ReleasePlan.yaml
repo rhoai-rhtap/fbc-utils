@@ -1,0 +1,30 @@
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: ReleasePlan
+metadata:
+  labels:
+    release.appstudio.openshift.io/auto-release: 'true'
+    release.appstudio.openshift.io/standing-attribution: 'true'
+  name: rhoai-tenant-pipeline
+  namespace: rhoai-tenant
+spec:
+  application: rhoai-operator
+  pipeline:
+    pipelineRef:
+      params:
+        - name: url
+          value: https://github.com/rhoai-rhtap/test-pipeline.git
+        - name: revision
+          value: main
+        - name: pathInRepo
+          value: useful-pipeline.yaml
+      resolver: "git"
+    serviceAccountName: appstudio-pipeline
+    params:
+      - name: released_version
+        value: 1.0.1
+      - name: git_repo
+        value: https://gitlab.cee.redhat.com/red-hat-data-services/codeflare-operator
+      - name: git_commit_id
+        value: f90003dab17ff99c052518c4da7c920c9a9132aa
+      - name: git_secret_name
+        value: rhoai-pipeline-secret

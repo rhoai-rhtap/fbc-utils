@@ -1,0 +1,14 @@
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Release
+metadata:
+ name: rhoai-tenant-release
+ generateName: tenant-pipeline
+ labels:
+   appstudio.openshift.io/application: rhoai-operator
+   appstudio.openshift.io/component: odh-operator-bundle
+   release.appstudio.openshift.io/automated: "false"
+ namespace: rhoai-tenant
+spec:
+ releasePlan: rhoai-tenant-pipeline
+ snapshot: rhoai-operator-xv9zh
+ gracePeriodDays: 7

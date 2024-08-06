@@ -1,0 +1,115 @@
+{
+  "rhods-operator": {
+    "name": "rhods-operator",
+    "description": "",
+    "icon": null,
+    "defaultChannel": "fast",
+    "Channels": {
+      "fast": {
+        "Name": "fast",
+        "Head": "rhods-operator.2.11.0",
+        "Bundles": {
+          "rhods-operator.2.10.0": {
+            "package": "rhods-operator",
+            "channel": "fast",
+            "name": "rhods-operator.2.10.0",
+            "replaces": "rhods-operator.2.9.1",
+            "skips": [
+              "rhods-operator.2.6.0",
+              "rhods-operator.2.7.0",
+              "rhods-operator.2.8.0",
+              "rhods-operator.2.8.1",
+              "rhods-operator.2.8.2",
+              "rhods-operator.2.8.3",
+              "rhods-operator.2.9.0"
+            ]
+          },
+          "rhods-operator.2.11.0": {
+            "package": "rhods-operator",
+            "channel": "fast",
+            "name": "rhods-operator.2.11.0",
+            "replaces": "rhods-operator.2.10.0",
+            "skips": [
+              "rhods-operator.2.6.0",
+              "rhods-operator.2.7.0",
+              "rhods-operator.2.8.0",
+              "rhods-operator.2.8.1",
+              "rhods-operator.2.8.2",
+              "rhods-operator.2.8.3",
+              "rhods-operator.2.9.0",
+              "rhods-operator.2.9.1"
+            ]
+          },
+          "rhods-operator.2.6.0": {
+            "package": "rhods-operator",
+            "channel": "fast",
+            "name": "rhods-operator.2.6.0",
+            "replaces": "",
+            "skips": null
+          },
+          "rhods-operator.2.7.0": {
+            "package": "rhods-operator",
+            "channel": "fast",
+            "name": "rhods-operator.2.7.0",
+            "replaces": "rhods-operator.2.6.0",
+            "skips": null
+          },
+          "rhods-operator.2.8.0": {
+            "package": "rhods-operator",
+            "channel": "fast",
+            "name": "rhods-operator.2.8.0",
+            "replaces": "",
+            "skips": null
+          },
+          "rhods-operator.2.8.1": {
+            "package": "rhods-operator",
+            "channel": "fast",
+            "name": "rhods-operator.2.8.1",
+            "replaces": "",
+            "skips": null
+          },
+          "rhods-operator.2.8.2": {
+            "package": "rhods-operator",
+            "channel": "fast",
+            "name": "rhods-operator.2.8.2",
+            "replaces": "",
+            "skips": null
+          },
+          "rhods-operator.2.8.3": {
+            "package": "rhods-operator",
+            "channel": "fast",
+            "name": "rhods-operator.2.8.3",
+            "replaces": "rhods-operator.2.7.0",
+            "skips": [
+              "rhods-operator.2.6.0",
+              "rhods-operator.2.8.0",
+              "rhods-operator.2.8.1",
+              "rhods-operator.2.8.2"
+            ]
+          },
+          "rhods-operator.2.9.0": {
+            "package": "rhods-operator",
+            "channel": "fast",
+            "name": "rhods-operator.2.9.0",
+            "replaces": "",
+            "skips": null
+          },
+          "rhods-operator.2.9.1": {
+            "package": "rhods-operator",
+            "channel": "fast",
+            "name": "rhods-operator.2.9.1",
+            "replaces": "rhods-operator.2.8.3",
+            "skips": [
+              "rhods-operator.2.6.0",
+              "rhods-operator.2.7.0",
+              "rhods-operator.2.8.0",
+              "rhods-operator.2.8.1",
+              "rhods-operator.2.8.2",
+              "rhods-operator.2.9.0"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

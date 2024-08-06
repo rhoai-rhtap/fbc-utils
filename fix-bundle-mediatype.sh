@@ -29,10 +29,15 @@ image_path="docker://$(yq e '.replacements[0].to' "$cfg")"
 while read -r bundle_digest
 do
     IFS=$'\t' read -r media_type zeroth_digest < <(skopeo inspect --raw "$image_path@$bundle_digest" | jq -r '[.mediaType, (.manifests | .[0]?.digest)] | @tsv')
+    echo "media_type=$media_type"
+    echo "zeroth_digest=$zeroth_digest"
+
     case $media_type in
         application/vnd.docker.distribution.manifest.list.v2+json)
             echo "Converting manifest list to manifest for bundle $bundle_digest" >&2
-            B="$bundle_digest" D="$zeroth_digest" yq -i e '(.bundles[] | select(. == strenv(B))) = strenv(D)' "$cfg"
+            export B="$bundle_digest"
+            expost D="$zeroth_digest"
+            yq e '(.bundles[] | select(. == strenv(B))) = strenv(D)' "$cfg"
             ;;
         application/vnd.docker.distribution.manifest.v2+json)
             ;;

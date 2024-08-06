@@ -1,0 +1,106 @@
+---
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: useful-pipeline
+  labels:
+    app.kubernetes.io/version: "0.1"
+  annotations:
+    tekton.dev/pipelines.minVersion: "0.12.1"
+    tekton.dev/tags: release
+spec:
+  description: Useful Pipeline
+  params:
+    - name: released_version
+      type: string
+    - name: git_repo
+      type: string
+    - name: git_commit_id
+      type: string
+    - name: git_secret_name
+      type: string
+  workspaces:
+    - name: release-workspace
+  tasks:
+    - name: changelog-task
+      params:
+        - name: GIT_REPO
+          value: "$(params.git_repo)"
+        - name: GIT_COMMIT_ID
+          value: "$(params.git_commit_id)"
+        - name: SECRET_NAME
+          value: "$(params.git_secret_name)"
+        - name: RELEASED_VERSION
+          value: "$(params.released_version)"
+      taskSpec:
+        workspaces:
+          - name: data
+        params:
+          - name: RELEASED_VERSION
+            value: $(params.released_version)
+          - name: GIT_REPO
+            value: $(params.GIT_REPO)
+          - name: GIT_COMMIT_ID
+            value: $(params.GIT_COMMIT_ID)
+          - name: SECRET_NAME
+            value: $(params.SECRET_NAME)
+        steps:
+          - name: create-changelog
+            image: quay.io/redhat-appstudio/release-service-utils:bc81bfed6062a386e48a76b252c6f33b52c411b0
+            env:
+              - name: GITLAB_HOST
+                valueFrom:
+                  secretKeyRef:
+                    name: $(params.SECRET_NAME)
+                    key: gitlab_host
+              - name: ACCESS_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: $(params.SECRET_NAME)
+                    key: git_access_token
+              - name: GIT_AUTHOR_NAME
+                valueFrom:
+                  secretKeyRef:
+                    name: $(params.SECRET_NAME)
+                    key: git_author_name
+              - name: GIT_AUTHOR_EMAIL
+                valueFrom:
+                  secretKeyRef:
+                    name: $(params.SECRET_NAME)
+                    key: git_author_email
+            script: |
+              #!/usr/bin/env sh
+              set -eo pipefail
+
+              # loading git and gitlab functions
+              . /home/utils/gitlab-functions
+              . /home/utils/git-functions
+
+              gitlab_init
+              git_functions_init
+
+              TEMP=$(mktemp -d /tmp/file-updates.XXXX)
+
+              cd $TEMP
+              git_clone_and_checkout --repository $(params.GIT_REPO) --revision "master"
+
+              git fetch --unshallow --filter=tree:0
+
+              git log --pretty=format:"%at - %an <%ae>%n- %s" $(params.GIT_COMMIT_ID)..HEAD |awk \
+              'BEGIN{pdate=""}
+              {
+                  if (match($1, /[0-9]+/)) {
+                      date=strftime("%a %b %d %Y", $1);
+                      # printf "[%s:%s]", date, pdate
+                      if (date!=pdate) {
+                          s=gensub(/[0-9]+/, date, "G")
+                          print "\n*", s
+                      }
+                      pdate=date
+                  } else {
+                      print $0
+                  }
+              }'
+      workspaces:
+        - name: data
+          workspace: release-workspace

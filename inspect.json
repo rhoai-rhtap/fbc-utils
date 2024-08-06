@@ -1,0 +1,151 @@
+[
+     {
+          "Id": "8be2b00669f0f7152f08aade88585131e3e509461f48a7493c71efa73ec616d7",
+          "Digest": "sha256:f54a941b4bf49ece4f0c28f3b0618307d67c31739fec33271ee091f838bddfc8",
+          "RepoTags": [],
+          "RepoDigests": [
+               "registry.redhat.io/rhoai/odh-operator-bundle@sha256:c46df3b6fbfd24a7f8a23342e73c077bce0ddcf7b8b2e0324a733a9ec26418f5",
+               "registry.redhat.io/rhoai/odh-operator-bundle@sha256:f54a941b4bf49ece4f0c28f3b0618307d67c31739fec33271ee091f838bddfc8"
+          ],
+          "Parent": "",
+          "Comment": "",
+          "Created": "2024-01-31T07:23:21.165896163Z",
+          "Config": {
+               "Env": [
+                    "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+               ],
+               "Labels": {
+                    "architecture": "x86_64",
+                    "build-date": "2024-01-31T07:22:12",
+                    "com.redhat.component": "odh-operator-bundle-container",
+                    "com.redhat.delivery.operator.bundle": "true",
+                    "com.redhat.license_terms": "https://www.redhat.com/licenses/Red_Hat_Standard_EULA_20191108.pdf",
+                    "com.redhat.openshift.versions": "v4.11",
+                    "distribution-scope": "public",
+                    "io.buildah.version": "1.29.0",
+                    "name": "managed-open-data-hub/odh-operator-bundle-rhel8",
+                    "operators.operatorframework.io.bundle.channel.default.v1": "stable",
+                    "operators.operatorframework.io.bundle.channels.v1": "stable,fast,alpha,embedded",
+                    "operators.operatorframework.io.bundle.manifests.v1": "manifests/",
+                    "operators.operatorframework.io.bundle.mediatype.v1": "registry+v1",
+                    "operators.operatorframework.io.bundle.metadata.v1": "metadata/",
+                    "operators.operatorframework.io.bundle.package.v1": "rhods-operator",
+                    "operators.operatorframework.io.metrics.builder": "operator-sdk-v1.24.1",
+                    "operators.operatorframework.io.metrics.mediatype.v1": "metrics+v1",
+                    "operators.operatorframework.io.metrics.project_layout": "go.kubebuilder.io/v3",
+                    "operators.operatorframework.io.test.config.v1": "tests/scorecard/",
+                    "operators.operatorframework.io.test.mediatype.v1": "scorecard+v1",
+                    "release": "40",
+                    "url": "https://access.redhat.com/containers/#/registry.access.redhat.com/managed-open-data-hub/odh-operator-bundle-rhel8/images/v2.6.0-40",
+                    "vcs-ref": "36ca055cd78562bddea230167929683893ef5660",
+                    "vcs-type": "git",
+                    "vendor": "Red Hat, Inc.",
+                    "version": "v2.6.0"
+               }
+          },
+          "Version": "",
+          "Author": "",
+          "Architecture": "amd64",
+          "Os": "linux",
+          "Size": 146232,
+          "VirtualSize": 146232,
+          "GraphDriver": {
+               "Name": "overlay",
+               "Data": {
+                    "UpperDir": "/home/dchouras/.local/share/containers/storage/overlay/629d4e572605eeeb06390704f2b46ee5acea7e363ef8301ffde49620f235d3af/diff",
+                    "WorkDir": "/home/dchouras/.local/share/containers/storage/overlay/629d4e572605eeeb06390704f2b46ee5acea7e363ef8301ffde49620f235d3af/work"
+               }
+          },
+          "RootFS": {
+               "Type": "layers",
+               "Layers": [
+                    "sha256:629d4e572605eeeb06390704f2b46ee5acea7e363ef8301ffde49620f235d3af"
+               ]
+          },
+          "Labels": {
+               "architecture": "x86_64",
+               "build-date": "2024-01-31T07:22:12",
+               "com.redhat.component": "odh-operator-bundle-container",
+               "com.redhat.delivery.operator.bundle": "true",
+               "com.redhat.license_terms": "https://www.redhat.com/licenses/Red_Hat_Standard_EULA_20191108.pdf",
+               "com.redhat.openshift.versions": "v4.11",
+               "distribution-scope": "public",
+               "io.buildah.version": "1.29.0",
+               "name": "managed-open-data-hub/odh-operator-bundle-rhel8",
+               "operators.operatorframework.io.bundle.channel.default.v1": "stable",
+               "operators.operatorframework.io.bundle.channels.v1": "stable,fast,alpha,embedded",
+               "operators.operatorframework.io.bundle.manifests.v1": "manifests/",
+               "operators.operatorframework.io.bundle.mediatype.v1": "registry+v1",
+               "operators.operatorframework.io.bundle.metadata.v1": "metadata/",
+               "operators.operatorframework.io.bundle.package.v1": "rhods-operator",
+               "operators.operatorframework.io.metrics.builder": "operator-sdk-v1.24.1",
+               "operators.operatorframework.io.metrics.mediatype.v1": "metrics+v1",
+               "operators.operatorframework.io.metrics.project_layout": "go.kubebuilder.io/v3",
+               "operators.operatorframework.io.test.config.v1": "tests/scorecard/",
+               "operators.operatorframework.io.test.mediatype.v1": "scorecard+v1",
+               "release": "40",
+               "url": "https://access.redhat.com/containers/#/registry.access.redhat.com/managed-open-data-hub/odh-operator-bundle-rhel8/images/v2.6.0-40",
+               "vcs-ref": "36ca055cd78562bddea230167929683893ef5660",
+               "vcs-type": "git",
+               "vendor": "Red Hat, Inc.",
+               "version": "v2.6.0"
+          },
+          "Annotations": {},
+          "ManifestType": "application/vnd.docker.distribution.manifest.v2+json",
+          "User": "",
+          "History": [
+               {
+                    "created": "2024-01-31T07:23:20.23118432Z",
+                    "created_by": "/bin/sh -c #(nop) LABEL     operators.operatorframework.io.bundle.mediatype.v1=\"registry+v1\"     operators.operatorframework.io.bundle.manifests.v1=\"manifests/\"     operators.operatorframework.io.bundle.metadata.v1=\"metadata/\"     operators.operatorframework.io.bundle.package.v1=\"rhods-operator\"     operators.operatorframework.io.bundle.channel.default.v1=\"stable\"     operators.operatorframework.io.bundle.channels.v1=\"stable,fast,alpha,embedded\"     operators.operatorframework.io.metrics.builder=\"operator-sdk-v1.24.1\"     operators.operatorframework.io.metrics.mediatype.v1=\"metrics+v1\"     operators.operatorframework.io.metrics.project_layout=\"go.kubebuilder.io/v3\"",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2024-01-31T07:23:20.23125911Z",
+                    "created_by": "/bin/sh -c #(nop) LABEL     operators.operatorframework.io.test.mediatype.v1=\"scorecard+v1\"     operators.operatorframework.io.test.config.v1=\"tests/scorecard/\"",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2024-01-31T07:23:20.231345912Z",
+                    "created_by": "/bin/sh -c #(nop) LABEL     com.redhat.delivery.operator.bundle=\"true\"     com.redhat.openshift.versions=\"v4.11\"     com.redhat.component=\"odh-operator-bundle-container\"     com.redhat.license_terms=\"https://www.redhat.com/licenses/Red_Hat_Standard_EULA_20191108.pdf\"     name=\"managed-open-data-hub/odh-operator-bundle-rhel8\"     version=\"v2.6.0\"",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2024-01-31T07:23:20.439241131Z",
+                    "created_by": "/bin/sh -c #(nop) COPY dir:a39e0f531a275cb62981a4189916b12ebea883fcf728fc6fb1946dcf3dc72fe8 in /manifests ",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2024-01-31T07:23:20.624038877Z",
+                    "created_by": "/bin/sh -c #(nop) COPY dir:a0688cf842dbd1c0e5ff4b18edf71b5381f1cdd7ce2edeeef69680569884397a in /metadata ",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2024-01-31T07:23:20.806242771Z",
+                    "created_by": "/bin/sh -c #(nop) COPY dir:a78279a98b2eae6920fe7e53f553ea0202bfcf8dcd8c609c3efd8ae7ff104b76 in /tests/scorecard/ ",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2024-01-31T07:23:20.806277687Z",
+                    "created_by": "/bin/sh -c #(nop) LABEL release=40",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2024-01-31T07:23:20.984065613Z",
+                    "created_by": "/bin/sh -c #(nop) ADD file:8083c8a8ea72aefedff6ede19021e570a6364f91a504a8eefdca1855c5cfabc3 in /root/buildinfo/content_manifests/odh-operator-bundle-container-v2.6.0-40.json ",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2024-01-31T07:23:21.164589049Z",
+                    "created_by": "/bin/sh -c #(nop) ADD file:28ac5dc1bbd2f8bf4c30521036709585e7e36d7f9ab5894ba7cac49ebe5ce25e in /root/buildinfo/Dockerfile-managed-open-data-hub-odh-operator-bundle-rhel8-v2.6.0-40 ",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2024-01-31T07:23:21.168354239Z",
+                    "created_by": "/bin/sh -c #(nop) LABEL \"distribution-scope\"=\"public\" \"vendor\"=\"Red Hat, Inc.\" \"build-date\"=\"2024-01-31T07:22:12\" \"architecture\"=\"x86_64\" \"vcs-type\"=\"git\" \"vcs-ref\"=\"36ca055cd78562bddea230167929683893ef5660\" \"url\"=\"https://access.redhat.com/containers/#/registry.access.redhat.com/managed-open-data-hub/odh-operator-bundle-rhel8/images/v2.6.0-40\""
+               }
+          ],
+          "NamesHistory": [
+               "registry.redhat.io/rhoai/odh-operator-bundle@sha256:c46df3b6fbfd24a7f8a23342e73c077bce0ddcf7b8b2e0324a733a9ec26418f5"
+          ]
+     }
+]
