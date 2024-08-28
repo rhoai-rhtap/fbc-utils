@@ -1,0 +1,3 @@
+cd tenants-config
+./build-manifest.sh
+yamllint -s -f colored .gitlab-ci.yml .gitlab config/ hack/ tenants-config/lib tenants-config/cluster

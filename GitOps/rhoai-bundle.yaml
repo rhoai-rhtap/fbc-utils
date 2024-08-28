@@ -1,0 +1,29 @@
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Component
+metadata:
+  annotations:
+    build.appstudio.openshift.io/pipeline: '{"name":"docker-build","bundle":"latest"}'
+    build.appstudio.openshift.io/request: configure-pac
+  creationTimestamp: "2024-08-08T06:49:03Z"
+  finalizers:
+  - test.appstudio.openshift.io/component
+  - pac.component.appstudio.openshift.io/finalizer
+  generation: 1
+  name: rhoai-operator-bundle-v2-12
+  namespace: rhoai-tenant
+  ownerReferences:
+  - apiVersion: appstudio.redhat.com/v1alpha1
+    kind: Application
+    name: rhoai-v2-12
+    uid: d702b021-e062-4332-abcb-433bb4c46549
+  resourceVersion: "2111011221"
+  uid: 0c66daa8-3b2d-4611-b340-22941e24b1c3
+spec:
+  application: rhoai-v2-12
+  componentName: rhoai-operator-bundle-v2-12
+  resources: {}
+  source:
+    git:
+      dockerfileUrl: bundle/Dockerfile
+      revision: rhoai-2.12
+      url: https://github.com/red-hat-data-services/RHOAI-Build-Config

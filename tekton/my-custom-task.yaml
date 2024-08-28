@@ -1,0 +1,19 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: my-custom-task
+spec:
+  params:
+  - name: username
+    type: string
+  steps:
+    - name: echo
+      image: alpine
+      script: |
+        #!/bin/bash
+        echo "Hello World!!!"
+    - name: goodbye
+      image: alpine
+      script: |
+        #!/bin/bash
+        echo "Goodbye $(params.username)!"

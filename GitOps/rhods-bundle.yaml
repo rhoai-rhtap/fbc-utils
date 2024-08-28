@@ -1,0 +1,34 @@
+apiVersion: appstudio.redhat.com/v1alpha1
+kind: Component
+metadata:
+  annotations:
+    build.appstudio.openshift.io/pipeline: '{"name":"docker-build","bundle":"latest"}'
+    build.appstudio.openshift.io/status: '{"pac":{"state":"enabled","merge-url":"https://github.com/rhoai-rhtap/rhods-operator/pull/5","configuration-time":"Wed,
+      07 Aug 2024 06:19:44 UTC"},"message":"done"}'
+  creationTimestamp: "2024-08-07T06:19:37Z"
+  finalizers:
+  - test.appstudio.openshift.io/component
+  - pac.component.appstudio.openshift.io/finalizer
+  generation: 4
+  name: rhods-operator-v-2-12
+  namespace: rhoai-tenant
+  ownerReferences:
+  - apiVersion: appstudio.redhat.com/v1alpha1
+    kind: Application
+    name: rhoai-operator
+    uid: 1e861f2c-b473-4e55-97a3-6c8ee30d4f12
+  resourceVersion: "2106082144"
+  uid: c5bf7ace-8df2-40b0-adc5-63335cfd8d8c
+spec:
+  application: rhoai-operator
+  componentName: rhods-operator-v-2-12
+  containerImage: quay.io/redhat-user-workloads/rhoai-tenant/rhoai-operator/rhods-operator-v-2-12@sha256:fd1fc5189f5a0b2b67ace0f7f55f38c1eb45b14b5df299ca42692d042772951a
+  resources: {}
+  source:
+    git:
+      dockerfileUrl: Dockerfiles/Dockerfile
+      revision: rhoai-2.12
+      url: https://github.com/rhoai-rhtap/rhods-operator
+status:
+  gitops: {}
+  lastBuiltCommit: 001ca3ccb3f6264457ca6c6ffaa0fa77fc03a100
