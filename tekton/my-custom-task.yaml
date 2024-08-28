@@ -13,7 +13,7 @@ spec:
         #!/bin/bash
         echo "Hello World!!!"
     - name: goodbye
-      image: alpine
+      image: ubuntu
       script: |
         #!/bin/bash
         echo "Goodbye $(params.username)!"
