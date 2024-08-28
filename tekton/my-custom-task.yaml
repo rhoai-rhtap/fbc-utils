@@ -8,12 +8,12 @@ spec:
     type: string
   steps:
     - name: echo
-      image: alpine
+      image: docker.io/library/alpine:latest
       script: |
         #!/bin/bash
         echo "Hello World!!!"
     - name: goodbye
-      image: ubuntu
+      image: docker.io/library/alpine:latest
       script: |
         #!/bin/bash
         echo "Goodbye $(params.username)!"
