@@ -8,12 +8,13 @@ spec:
     type: string
   steps:
     - name: echo
-      image: docker.io/library/alpine:latest
+      image: quay.io/redhat-appstudio/task-toolset@sha256:5c6b5f9f5b3df5379e37d6f045d10910339c88ab19038ce7a78d414204b63cec
       script: |
         #!/bin/bash
+        echo "starting the task"
         echo "Hello World!!!"
     - name: goodbye
-      image: docker.io/library/alpine:latest
+      image: quay.io/redhat-appstudio/task-toolset@sha256:5c6b5f9f5b3df5379e37d6f045d10910339c88ab19038ce7a78d414204b63cec
       script: |
         #!/bin/bash
         echo "Goodbye $(params.username)!"
