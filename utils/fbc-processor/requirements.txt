@@ -1,0 +1,2 @@
+jsonupdate-ng==1.0.0
+jsonpath-ng==1.6.1
