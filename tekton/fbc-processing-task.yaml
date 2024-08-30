@@ -37,6 +37,13 @@ spec:
         
         #Invoke the FBC processor
         python3 utils/fbc-processor/fbc-processor.py ${CATALOG_YAML_PATH} ${PATCH_YAML_PATH} ${SINGLE_BUNDLE_PATH} ${OUTPUT_CATALOG_PATH}
+        
+        #Push the changes to the release branch
+        cd $(params.revision)
+        git add .
+        git status
+        git commit -m "updating the latest FBC catalog.yaml to the release branch"
+        git push -u origin $(params.revision)
 
     - name: hello
       image: quay.io/redhat-appstudio/task-toolset@sha256:5c6b5f9f5b3df5379e37d6f045d10910339c88ab19038ce7a78d414204b63cec
