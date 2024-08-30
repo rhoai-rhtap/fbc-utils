@@ -29,9 +29,10 @@ class fbc_processor:
         if 'olm.channels' in self.patch_dict:
             self.patch_olm_channels()
 
-
     def write_output_catalog(self):
         docs = [doc for schema, schema_val in self.catalog_dict.items() for name, doc in schema_val.items()]
+        yaml.add_representer(str, str_presenter)
+        yaml.representer.SafeRepresenter.add_representer(str, str_presenter)
         yaml.safe_dump_all(docs, open(self.output_catalog_path, 'w'))
 
 
@@ -53,7 +54,10 @@ class fbc_processor:
     def patch_olm_bundles(self):
         pass
 
-
+def str_presenter(dumper, data):
+    if data.count('\n') > 0:
+        return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
+    return dumper.represent_scalar('tag:yaml.org,2002:str', data)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
