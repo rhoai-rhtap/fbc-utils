@@ -11,13 +11,19 @@ for obj in objs:
     # print(obj)
     catalog_dict[obj['schema']][obj['name']] = obj
 
+# print(json.dumps(catalog_dict, indent=4))
+
 patch_yaml_path = '/home/dchouras/RHODS/DevOps/FBC/rhoai-2.13/catalog/catalog-patch.yaml'
 patch_dict = yaml.safe_load(open(patch_yaml_path))
 
 SCHEMA = 'olm.package'
 patch = patch_dict['patch'][SCHEMA]
-updatedJson = jsonupdate_ng.updateJson(json.dumps(catalog_dict[SCHEMA][patch['name']]), json.dumps(patch))
-print(updatedJson)
+catalog_dict[SCHEMA][patch['name']] = jsonupdate_ng.updateJson(catalog_dict[SCHEMA][patch['name']], patch)
+
+
+
+docs = [doc for schema, schema_dict in catalog_dict.items() for name, doc in schema_dict.items()]
+yaml.safe_dump_all(docs, open('output.yaml', 'w'))
 
 
 

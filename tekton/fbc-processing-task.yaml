@@ -13,15 +13,30 @@ spec:
       image: quay.io/redhat-appstudio/task-toolset@sha256:5c6b5f9f5b3df5379e37d6f045d10910339c88ab19038ce7a78d414204b63cec
       script: |
         #!/bin/bash
+        
+        #Declare basic variables
+        OPENSHIFT_VERSION=v4.13
         RBC_REPO_URL="git@github.com:red-hat-data-services/RHOAI-Build-Config.git"
         UTILS_REPO_URL="git@github.com:rhoai-rhtap/fbc-utils.git"
+        
+        #check the playpen
         echo "current dir $(pwd)"
         echo "contents $(ls -l)"
         echo "cloning the main branch to main dir"
+        
+        #Clone all the required repos
         git clone ${RBC_REPO_URL} --branch main main
         git clone ${RBC_REPO_URL} --branch $(params.revision) $(params.revision)
         git clone ${UTILS_REPO_URL} utils
         
+        #Declare FBC processing variables
+        CATALOG_YAML_PATH=main/catalog/${OPENSHIFT_VERSION}/rhods-operator/catalog.yaml
+        PATCH_YAML_PATH=$(params.revision)/catalog/catalog-patch.yaml
+        SINGLE_BUNDLE_PATH=latest_bundle.yaml
+        OUTPUT_CATALOG_PATH=$(params.revision)/catalog/${OPENSHIFT_VERSION}/rhods-operator/catalog.yaml
+        
+        #Invoke the FBC processor
+        python3 utils/fbc-processor/fbc-processor.py ${CATALOG_YAML_PATH} ${PATCH_YAML_PATH} ${SINGLE_BUNDLE_PATH} ${OUTPUT_CATALOG_PATH}
 
     - name: hello
       image: quay.io/redhat-appstudio/task-toolset@sha256:5c6b5f9f5b3df5379e37d6f045d10910339c88ab19038ce7a78d414204b63cec
