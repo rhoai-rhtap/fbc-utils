@@ -4,6 +4,7 @@ metadata:
   namespace: rhoai-tenant
   name: rhoai-sa-role
 rules:
-- apiGroups: [""] #
-  resources: ["task"]
-  verbs: ["get", "watch", "list", update, patch, delete, create]
+- apiGroups: [""]
+  resources: ["applications", "component", "environment", "pods", "deployment", "deploymenttarget", "gitops", "pipelinerun", "pipelineresult",
+  "integrationtestscenarios", "enterprisecontractpolicies"]
+  verbs: ["get"]

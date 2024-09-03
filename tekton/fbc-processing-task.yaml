@@ -4,9 +4,9 @@ metadata:
   name: process-fbc
 spec:
   params:
-  - name: username
-    type: string
   - name: revision
+    type: string
+  - name: bundle-component-name
     type: string
   steps:
     - name: process-fbc-fragment
