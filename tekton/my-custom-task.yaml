@@ -24,6 +24,14 @@ spec:
       script: |
         #!/bin/bash
         API_SERVER=""
+        
+        OC_CLI_MIRROR="https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz"
+        wget ${OC_CLI_MIRROR} 
+        tar xvf openshift-client-linux.tar.gz
+        chmod +x oc
+        sudo mv oc /usr/local/bin/
+        oc
+        
         if [[ $(params.CLUSTER) == 'rh01' ]]
         then
           API_SERVER="https://api.stone-prd-rh01.pg1f.p1.openshiftapps.com:6443"
