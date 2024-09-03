@@ -5,6 +5,6 @@ metadata:
   name: rhoai-sa-role
 rules:
 - apiGroups: [""]
-  resources: ["applications", "component", "environment", "pods", "deployment", "deploymenttarget", "gitops", "pipelinerun", "pipelineresult",
+  resources: ["applications", "component", "pipelinerun", "pipelineresult",
   "integrationtestscenarios", "enterprisecontractpolicies"]
   verbs: ["get"]
