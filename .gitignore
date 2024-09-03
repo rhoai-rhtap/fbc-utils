@@ -3,3 +3,5 @@
 /workdir/
 /verified_coordinates
 .idea/*
+*secret.yaml
+**/*secret.yaml

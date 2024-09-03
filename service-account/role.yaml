@@ -5,6 +5,11 @@ metadata:
   name: rhoai-sa-role
 rules:
 - apiGroups: [""]
-  resources: ["applications", "component", "pipelinerun", "pipelineresult",
-  "integrationtestscenarios", "enterprisecontractpolicies"]
-  verbs: ["get"]
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+- apiGroups: ["appstudio.redhat.com"]
+  resources: ["applications", "components", "integrationtestscenarios", "enterprisecontractpolicies"]
+  verbs: ["get", "watch", "list"]
+- apiGroups: ["tekton.dev"]
+  resources: ["pipelineruns", "pipelines"]
+  verbs: ["get", "watch", "list"]
