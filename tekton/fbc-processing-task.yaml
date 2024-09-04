@@ -4,7 +4,7 @@ metadata:
   name: process-fbc
 spec:
   params:
-  - name: revision
+  - name: branch
     type: string
   - name: bundle-component-name
     type: string
@@ -26,14 +26,14 @@ spec:
         
         #Clone all the required repos
         git clone ${RBC_REPO_URL} --branch main main
-        git clone ${RBC_REPO_URL} --branch $(params.revision) $(params.revision)
+        git clone ${RBC_REPO_URL} --branch $(params.branch) $(params.branch)
         git clone ${UTILS_REPO_URL} utils
         
         #Declare FBC processing variables
         CATALOG_YAML_PATH=main/catalog/${OPENSHIFT_VERSION}/rhods-operator/catalog.yaml
-        PATCH_YAML_PATH=$(params.revision)/catalog/catalog-patch.yaml
+        PATCH_YAML_PATH=$(params.branch)/catalog/catalog-patch.yaml
         SINGLE_BUNDLE_PATH=latest_bundle.yaml
-        OUTPUT_CATALOG_PATH=$(params.revision)/catalog/${OPENSHIFT_VERSION}/rhods-operator/catalog.yaml
+        OUTPUT_CATALOG_PATH=$(params.branch)/catalog/${OPENSHIFT_VERSION}/rhods-operator/catalog.yaml
         
         #Generate the catalog for the latest bundle
         API_SERVER=""
@@ -52,23 +52,28 @@ spec:
         
         OC_TOKEN=$(echo $OC_TOKEN | awk '{$1=$1};1' | tr -d '\n')
         
-        echo "secret = $(params.SECRET_NAME)"
-        echo "token = ${OC_TOKEN}"
         echo "API_SERVER = ${API_SERVER}"
         
         oc login --token="${OC_TOKEN}" --server=${API_SERVER}
-        oc get components -n rhoai-tenant
+        # oc get components -n rhoai-tenant
+        
+        echo "pipelinerun = ${PIPELINERUN_NAME}"
+        oc get pipelinerun ${PIPELINERUN_NAME}
+        APPLICATION_NAME=$(oc get pipelineruns -n rhoai-tenant ${PIPELINERUN_NAME} -o json | jq -r '.metadata.labels."appstudio.openshift.io/application"')
+        echo "APPLICATION_NAME = $APPLICATION_NAME"
+        LATEST_SNAPSHOT=$(oc get snapshots -l "pac.test.appstudio.openshift.io/event-type in (push, Push),appstudio.openshift.io/application=${APPLICATION_NAME}" --sort-by=.metadata.creationTimestamp | tail -1 | awk '{print $1}')
+        echo "LATEST_SNAPSHOT = ${LATEST_SNAPSHOT}"
         
         
         #Invoke the FBC processor
         python3 utils/fbc-processor/fbc-processor.py ${CATALOG_YAML_PATH} ${PATCH_YAML_PATH} ${SINGLE_BUNDLE_PATH} ${OUTPUT_CATALOG_PATH}
         
         #Push the changes to the release branch
-        cd $(params.revision)
+        cd $(params.branch)
         git add .
         git status
         git commit -m "updating the latest FBC catalog.yaml to the release branch"
-        git push -u origin $(params.revision)
+        git push -u origin $(params.branch)
 
     - name: hello
       image: quay.io/redhat-appstudio/task-toolset@sha256:5c6b5f9f5b3df5379e37d6f045d10910339c88ab19038ce7a78d414204b63cec
