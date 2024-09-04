@@ -1,0 +1,1 @@
+oc create token rhoai-sa --duration 9600h

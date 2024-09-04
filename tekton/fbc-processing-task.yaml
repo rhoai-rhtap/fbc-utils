@@ -98,6 +98,7 @@ spec:
         #Invoke the FBC processor
         pip install -r utils/fbc-processor/requirements.txt
         python3 utils/fbc-processor/fbc-processor.py ${CATALOG_YAML_PATH} ${PATCH_YAML_PATH} ${SINGLE_BUNDLE_PATH} ${OUTPUT_CATALOG_PATH}
+        cat ${OUTPUT_CATALOG_PATH}
         
         #Push the changes to the release branch
         #cd $(params.branch)

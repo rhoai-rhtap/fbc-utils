@@ -1,0 +1,2 @@
+podman build -t quay.io/rhoai/rhoai-task-toolset:latest .
+podman push quay.io/rhoai/rhoai-task-toolset:latest
