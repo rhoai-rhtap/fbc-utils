@@ -12,6 +12,8 @@ spec:
   - name: CLUSTER
     default: rh01
     type: string
+  - name: PIPELINERUN_NAME
+    type: string
   steps:
     - name: echo
       image: quay.io/rhoai/rhoai-task-toolset:latest
@@ -21,8 +23,6 @@ spec:
             secretKeyRef:
               name: $(params.SECRET_NAME)
               key: token
-        - name: PIPELINERUN_NAME
-          value: $(context.pipelineRun.name)
       script: |
         #!/bin/bash
         API_SERVER=""
@@ -41,7 +41,7 @@ spec:
         
         OC_TOKEN=$(echo $OC_TOKEN | awk '{$1=$1};1' | tr -d '\n')
         
-        echo "secret = $(params.SECRET_NAME)"
+        echo "secret = $(params.PIPELINERUN_NAME)"
         echo "token = ${OC_TOKEN}"
         echo "API_SERVER = ${API_SERVER}"
         
