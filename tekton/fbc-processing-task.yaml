@@ -52,10 +52,12 @@ spec:
         echo "contents $(ls -l)"
         echo "cloning the main branch to main dir"
         
+        echo "GH_USER = $GH_USER"
+        
         #Clone all the required repos
-        git clone https://${GH_USER}:${GH_PAT}@${RBC_REPO_URL} --branch main main
-        git clone https://${GH_USER}:${GH_PAT}@${RBC_REPO_URL} --branch $(params.branch) $(params.branch)
-        git clone https://${GH_USER}:${GH_PAT}@${UTILS_REPO_URL} utils
+        git clone "https://${GH_USER}:${GH_PAT}@${RBC_REPO_URL}" --branch=main main
+        git clone "https://${GH_USER}:${GH_PAT}@${RBC_REPO_URL}" --branch=$(params.branch) $(params.branch)
+        git clone "https://${GH_USER}:${GH_PAT}@${UTILS_REPO_URL}" utils
         
         #Declare FBC processing variables
         CATALOG_YAML_PATH=main/catalog/${OPENSHIFT_VERSION}/rhods-operator/catalog.yaml
