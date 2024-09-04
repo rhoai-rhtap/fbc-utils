@@ -21,6 +21,8 @@ spec:
             secretKeyRef:
               name: $(params.SECRET_NAME)
               key: token
+        - name: PIPELINERUN_NAME
+          value: $(context.pipelineRun.name)
       script: |
         #!/bin/bash
         API_SERVER=""
@@ -46,10 +48,10 @@ spec:
         oc login --token="${OC_TOKEN}" --server=${API_SERVER}
         # oc get components -n rhoai-tenant
         
-        echo "pipelinerun = $(context.pipelineRun.name)"
+        echo "pipelinerun = ${PIPELINERUN_NAME}"
         oc get pipeline $(context.pipelineRun.name) 
         oc get pipelineruns -n rhoai-tenant $(context.pipelineRun.name) -o json | jq -r '.metadata.labels."appstudio.openshift.io/application"'
-                
+        oc get snapshots -l "pac.test.appstudio.openshift.io/event-type in (push, Push),appstudio.openshift.io/application=$(context.pipelineRun.name)" --sort-by=.metadata.creationTimestamp | tail -1 | awk '{print $1}'
         echo "starting the task"
         echo "Hello World!!!"
     - name: goodbye
