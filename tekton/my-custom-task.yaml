@@ -36,6 +36,9 @@ spec:
         then
           API_SERVER="https://api.stone-prod-p02.hjvn.p1.openshiftapps.com:6443"
         fi
+        
+        OC_TOKEN=$(echo $OC_TOKEN | awk '{$1=$1};1' | tr -d '\n')
+        
         echo "secret = $(params.SECRET_NAME)"
         echo "token = ${OC_TOKEN}"
         echo "API_SERVER = ${API_SERVER}"
