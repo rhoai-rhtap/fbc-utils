@@ -63,12 +63,12 @@ def str_presenter(dumper, data):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--catalog-yaml-path', required=True,
+    parser.add_argument('-c', '--catalog-yaml-path', required=True,
                         help='Path of the catalog.yaml from the main branch.', dest='catalog_yaml_path')
-    parser.add_argument('--patch-yaml-path', required=True, help='Path of the catalog-patch.yaml from the release branch.', dest='patch_yaml_path')
-    parser.add_argument('--single-bundle-path', required=True,
+    parser.add_argument('-p', '--patch-yaml-path', required=True, help='Path of the catalog-patch.yaml from the release branch.', dest='patch_yaml_path')
+    parser.add_argument('-s', '--single-bundle-path', required=True,
                         help='Path of the single-bundle generated using the opm.', dest='single_bundle_path')
-    parser.add_argument('--output-catalog-path', required=True,
+    parser.add_argument('-o', '--output-catalog-path', required=True,
                         help='Path of the single-bundle generated using the opm.', dest='output_catalog_path')
     args = parser.parse_args()
     processor = fbc_processor(catalog_yaml_path=args.catalog_yaml_path, patch_yaml_path=args.patch_yaml_path, single_bundle_path=args.single_bundle_path, output_catalog_path=args.output_catalog_path)
