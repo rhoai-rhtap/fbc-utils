@@ -36,7 +36,7 @@ spec:
         - name: PIPELINERUN_NAME
           value: $(params.pipelinerun-name)
         - name: BRANCH
-          value: $(params.BRANCH)
+          value: $(params.branch)
       script: |
         #!/bin/bash
         
