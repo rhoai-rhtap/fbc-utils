@@ -49,7 +49,7 @@ spec:
         # oc get components -n rhoai-tenant
         
         echo "pipelinerun = ${PIPELINERUN_NAME}"
-        oc get pipeline ${PIPELINERUN_NAME}
+        oc get pipelinerun ${PIPELINERUN_NAME}
         oc get pipelineruns -n rhoai-tenant ${PIPELINERUN_NAME} -o json | jq -r '.metadata.labels."appstudio.openshift.io/application"'
         oc get snapshots -l "pac.test.appstudio.openshift.io/event-type in (push, Push),appstudio.openshift.io/application=${PIPELINERUN_NAME}" --sort-by=.metadata.creationTimestamp | tail -1 | awk '{print $1}'
 
