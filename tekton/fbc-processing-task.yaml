@@ -6,11 +6,6 @@ spec:
   params:
   - name: branch
     type: string
-  - name: rhoai-version
-    type: string
-  - name: component-suffix
-    default: "{{hyphenize .rhoai-version}}"
-    type: string
   - name: SECRET_NAME
     default: rhoai-konflux-secret
     type: string
@@ -22,13 +17,35 @@ spec:
   steps:
     - name: process-fbc-fragment
       image: quay.io/rhoai/rhoai-task-toolset:latest
+      env:
+        - name: OC_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: $(params.SECRET_NAME)
+              key: token
+        - name: GH_USER
+          valueFrom:
+            secretKeyRef:
+              name: $(params.SECRET_NAME)
+              key: username
+        - name: GH_PAT
+          valueFrom:
+            secretKeyRef:
+              name: $(params.SECRET_NAME)
+              key: pat
+        - name: PIPELINERUN_NAME
+          value: $(params.pipelinerun-name)
+        - name: BRANCH
+          value: $(params.BRANCH)
       script: |
         #!/bin/bash
         
         #Declare basic variables
         OPENSHIFT_VERSION=v4.13
-        RBC_REPO_URL="git@github.com:red-hat-data-services/RHOAI-Build-Config.git"
-        UTILS_REPO_URL="git@github.com:rhoai-rhtap/fbc-utils.git"
+        RHOAI_VERSION=v${BRANCH/rhoai-/}
+        COMPONENT_SUFFIX=${RHOAI_VERSION/./-}
+        RBC_REPO_URL="github.com/red-hat-data-services/RHOAI-Build-Config.git"
+        UTILS_REPO_URL="github.com/rhoai-rhtap/fbc-utils.git"
         
         #check the playpen
         echo "current dir $(pwd)"
@@ -36,9 +53,9 @@ spec:
         echo "cloning the main branch to main dir"
         
         #Clone all the required repos
-        git clone ${RBC_REPO_URL} --branch main main
-        git clone ${RBC_REPO_URL} --branch $(params.branch) $(params.branch)
-        git clone ${UTILS_REPO_URL} utils
+        git clone https://${GH_USER}:${GH_PAT}@${RBC_REPO_URL} --branch main main
+        git clone https://${GH_USER}:${GH_PAT}@${RBC_REPO_URL} --branch $(params.branch) $(params.branch)
+        git clone https://${GH_USER}:${GH_PAT}@${UTILS_REPO_URL} utils
         
         #Declare FBC processing variables
         CATALOG_YAML_PATH=main/catalog/${OPENSHIFT_VERSION}/rhods-operator/catalog.yaml
@@ -74,7 +91,7 @@ spec:
         LATEST_SNAPSHOT=$(oc get snapshots -l "pac.test.appstudio.openshift.io/event-type in (push, Push),appstudio.openshift.io/application=${APPLICATION_NAME}" --sort-by=.metadata.creationTimestamp | tail -1 | awk '{print $1}')
         echo "LATEST_SNAPSHOT = ${LATEST_SNAPSHOT}"
         
-        echo "component-suffix = $(params.component-suffix)"
+        echo "component-suffix = $COMPONENT_SUFFIX"
         
         
         
