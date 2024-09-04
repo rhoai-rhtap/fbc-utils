@@ -6,8 +6,21 @@ spec:
   params:
   - name: branch
     type: string
+  - name: rhoai-version
+    type: string
+  - name: component-suffix
+    default: "{{hyphenize .rhoai-version}}"
+    type: string
   - name: bundle-component-name
     type: string
+  - name: SECRET_NAME
+    default: rhoai-konflux-secret
+    type: string
+  - name: CLUSTER
+    default: rh01
+    type: string
+  - name: pipelinerun-name
+    description: pipeline-run to annotate
   steps:
     - name: process-fbc-fragment
       image: quay.io/rhoai/rhoai-task-toolset:latest
@@ -55,7 +68,6 @@ spec:
         echo "API_SERVER = ${API_SERVER}"
         
         oc login --token="${OC_TOKEN}" --server=${API_SERVER}
-        # oc get components -n rhoai-tenant
         
         echo "pipelinerun = ${PIPELINERUN_NAME}"
         oc get pipelinerun ${PIPELINERUN_NAME}
@@ -64,16 +76,20 @@ spec:
         LATEST_SNAPSHOT=$(oc get snapshots -l "pac.test.appstudio.openshift.io/event-type in (push, Push),appstudio.openshift.io/application=${APPLICATION_NAME}" --sort-by=.metadata.creationTimestamp | tail -1 | awk '{print $1}')
         echo "LATEST_SNAPSHOT = ${LATEST_SNAPSHOT}"
         
+        echo "component-suffix = $(params.component-suffix)"
+        
+        
         
         #Invoke the FBC processor
+        pip install -r utils/fbc-processor/requirements.txt
         python3 utils/fbc-processor/fbc-processor.py ${CATALOG_YAML_PATH} ${PATCH_YAML_PATH} ${SINGLE_BUNDLE_PATH} ${OUTPUT_CATALOG_PATH}
         
         #Push the changes to the release branch
-        cd $(params.branch)
-        git add .
-        git status
-        git commit -m "updating the latest FBC catalog.yaml to the release branch"
-        git push -u origin $(params.branch)
+        #cd $(params.branch)
+        #git add .
+        #git status
+        #git commit -m "updating the latest FBC catalog.yaml to the release branch"
+        #git push -u origin $(params.branch)
 
     - name: hello
       image: quay.io/redhat-appstudio/task-toolset@sha256:5c6b5f9f5b3df5379e37d6f045d10910339c88ab19038ce7a78d414204b63cec
