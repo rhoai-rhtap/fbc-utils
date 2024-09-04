@@ -44,8 +44,9 @@ spec:
         echo "API_SERVER = ${API_SERVER}"
         
         oc login --token="${OC_TOKEN}" --server=${API_SERVER}
-#        oc get components -n rhoai-tenant
+        # oc get components -n rhoai-tenant
         oc get pipeline $(context.pipelineRun.name) 
+        oc get pipelineruns -n rhoai-tenant $(context.pipelineRun.name) -o json | jq -r '.metadata.labels."appstudio.openshift.io/application"'
                 
         echo "starting the task"
         echo "Hello World!!!"
