@@ -10,7 +10,7 @@ spec:
     type: string
   steps:
     - name: process-fbc-fragment
-      image: quay.io/redhat-appstudio/task-toolset@sha256:5c6b5f9f5b3df5379e37d6f045d10910339c88ab19038ce7a78d414204b63cec
+      image: quay.io/rhoai/rhoai-task-toolset:latest
       script: |
         #!/bin/bash
         
@@ -34,6 +34,31 @@ spec:
         PATCH_YAML_PATH=$(params.revision)/catalog/catalog-patch.yaml
         SINGLE_BUNDLE_PATH=latest_bundle.yaml
         OUTPUT_CATALOG_PATH=$(params.revision)/catalog/${OPENSHIFT_VERSION}/rhods-operator/catalog.yaml
+        
+        #Generate the catalog for the latest bundle
+        API_SERVER=""
+        oc
+        
+        if [[ $(params.CLUSTER) == 'rh01' ]]
+        then
+          API_SERVER="https://api.stone-prd-rh01.pg1f.p1.openshiftapps.com:6443"
+        elif [[ $(params.CLUSTER) == 'm01' ]]
+        then 
+          API_SERVER="https://api.stone-prd-m01.84db.p1.openshiftapps.com:6443"
+        elif [[ $(params.CLUSTER) == 'p02' ]]
+        then
+          API_SERVER="https://api.stone-prod-p02.hjvn.p1.openshiftapps.com:6443"
+        fi
+        
+        OC_TOKEN=$(echo $OC_TOKEN | awk '{$1=$1};1' | tr -d '\n')
+        
+        echo "secret = $(params.SECRET_NAME)"
+        echo "token = ${OC_TOKEN}"
+        echo "API_SERVER = ${API_SERVER}"
+        
+        oc login --token="${OC_TOKEN}" --server=${API_SERVER}
+        oc get components -n rhoai-tenant
+        
         
         #Invoke the FBC processor
         python3 utils/fbc-processor/fbc-processor.py ${CATALOG_YAML_PATH} ${PATCH_YAML_PATH} ${SINGLE_BUNDLE_PATH} ${OUTPUT_CATALOG_PATH}
