@@ -8,7 +8,7 @@ rules:
   resources: ["pods"]
   verbs: ["get", "watch", "list"]
 - apiGroups: ["appstudio.redhat.com"]
-  resources: ["applications", "components", "integrationtestscenarios", "enterprisecontractpolicies"]
+  resources: ["applications", "components", "integrationtestscenarios", "enterprisecontractpolicies", "snapshots"]
   verbs: ["get", "watch", "list"]
 - apiGroups: ["tekton.dev"]
   resources: ["pipelineruns", "pipelines"]

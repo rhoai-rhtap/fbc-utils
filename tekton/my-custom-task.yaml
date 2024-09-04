@@ -12,8 +12,8 @@ spec:
   - name: CLUSTER
     default: rh01
     type: string
-  - name: PIPELINERUN_NAME
-    type: string
+  - name: pipelinerun-name
+    description: pipeline-run to annotate
   steps:
     - name: echo
       image: quay.io/rhoai/rhoai-task-toolset:latest
@@ -23,6 +23,8 @@ spec:
             secretKeyRef:
               name: $(params.SECRET_NAME)
               key: token
+        - name: PIPELINERUN_NAME
+          value: $(params.pipelinerun-name)
       script: |
         #!/bin/bash
         API_SERVER=""
@@ -41,19 +43,16 @@ spec:
         
         OC_TOKEN=$(echo $OC_TOKEN | awk '{$1=$1};1' | tr -d '\n')
         
-        echo "secret = $(params.PIPELINERUN_NAME)"
-        echo "token = ${OC_TOKEN}"
         echo "API_SERVER = ${API_SERVER}"
         
         oc login --token="${OC_TOKEN}" --server=${API_SERVER}
         # oc get components -n rhoai-tenant
         
         echo "pipelinerun = ${PIPELINERUN_NAME}"
-        oc get pipeline $(context.pipelineRun.name) 
-        oc get pipelineruns -n rhoai-tenant $(context.pipelineRun.name) -o json | jq -r '.metadata.labels."appstudio.openshift.io/application"'
-        oc get snapshots -l "pac.test.appstudio.openshift.io/event-type in (push, Push),appstudio.openshift.io/application=$(context.pipelineRun.name)" --sort-by=.metadata.creationTimestamp | tail -1 | awk '{print $1}'
-        echo "starting the task"
-        echo "Hello World!!!"
+        oc get pipeline ${PIPELINERUN_NAME}
+        oc get pipelineruns -n rhoai-tenant ${PIPELINERUN_NAME} -o json | jq -r '.metadata.labels."appstudio.openshift.io/application"'
+        oc get snapshots -l "pac.test.appstudio.openshift.io/event-type in (push, Push),appstudio.openshift.io/application=${PIPELINERUN_NAME}" --sort-by=.metadata.creationTimestamp | tail -1 | awk '{print $1}'
+
     - name: goodbye
       image: quay.io/redhat-appstudio/task-toolset@sha256:5c6b5f9f5b3df5379e37d6f045d10910339c88ab19038ce7a78d414204b63cec
       script: |
