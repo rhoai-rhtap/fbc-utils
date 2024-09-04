@@ -11,8 +11,6 @@ spec:
   - name: component-suffix
     default: "{{hyphenize .rhoai-version}}"
     type: string
-  - name: bundle-component-name
-    type: string
   - name: SECRET_NAME
     default: rhoai-konflux-secret
     type: string
