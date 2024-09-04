@@ -36,6 +36,9 @@ spec:
         then
           API_SERVER="https://api.stone-prod-p02.hjvn.p1.openshiftapps.com:6443"
         fi
+        echo "secret = $(params.SECRET_NAME)"
+        echo token = ${OC_TOKEN}"
+        
         oc login --token="${OC_TOKEN}" --server=${API_SERVER}
         oc get components -n rhoai-tenant
         
