@@ -1,0 +1,131 @@
+{
+    "apiVersion": "appstudio.redhat.com/v1alpha1",
+    "kind": "Snapshot",
+    "metadata": {
+        "annotations": {
+            "build.appstudio.openshift.io/repo": "https://github.com/red-hat-data-services/RHOAI-Build-Config?rev=4391de0735674bb6bb26116c961cc91e4d54db8b",
+            "build.appstudio.redhat.com/commit_sha": "4391de0735674bb6bb26116c961cc91e4d54db8b",
+            "build.appstudio.redhat.com/target_branch": "rhoai-2.13",
+            "pac.test.appstudio.openshift.io/branch": "rhoai-2.13",
+            "pac.test.appstudio.openshift.io/check-run-id": "29719917235",
+            "pac.test.appstudio.openshift.io/controller-info": "{\"name\":\"default\",\"configmap\":\"pipelines-as-code\",\"secret\":\"pipelines-as-code-secret\", \"gRepo\": \"pipelines-as-code\"}",
+            "pac.test.appstudio.openshift.io/event-type": "push",
+            "pac.test.appstudio.openshift.io/git-auth-secret": "pac-gitauth-rpxhhn",
+            "pac.test.appstudio.openshift.io/git-provider": "github",
+            "pac.test.appstudio.openshift.io/installation-id": "49275568",
+            "pac.test.appstudio.openshift.io/log-url": "https://console.redhat.com/preview/application-pipeline/ns/rhoai-tenant/pipelinerun/rhoai-fbc-v2-13-on-push-7gm2b",
+            "pac.test.appstudio.openshift.io/max-keep-runs": "3",
+            "pac.test.appstudio.openshift.io/on-cel-expression": "event == \"push\" \u0026\u0026 target_branch == \"rhoai-2.13\"",
+            "pac.test.appstudio.openshift.io/original-prname": "rhoai-fbc-v2-13-on-push",
+            "pac.test.appstudio.openshift.io/repo-url": "https://github.com/red-hat-data-services/RHOAI-Build-Config",
+            "pac.test.appstudio.openshift.io/repository": "rhoai-fbc-component-v4-13",
+            "pac.test.appstudio.openshift.io/sender": "dchourasia",
+            "pac.test.appstudio.openshift.io/sha": "4391de0735674bb6bb26116c961cc91e4d54db8b",
+            "pac.test.appstudio.openshift.io/sha-title": "updating tekton",
+            "pac.test.appstudio.openshift.io/sha-url": "https://github.com/red-hat-data-services/RHOAI-Build-Config/commit/4391de0735674bb6bb26116c961cc91e4d54db8b",
+            "pac.test.appstudio.openshift.io/source-branch": "refs/heads/rhoai-2.13",
+            "pac.test.appstudio.openshift.io/source-repo-url": "https://github.com/red-hat-data-services/RHOAI-Build-Config",
+            "pac.test.appstudio.openshift.io/state": "completed",
+            "pac.test.appstudio.openshift.io/url-org": "red-hat-data-services",
+            "pac.test.appstudio.openshift.io/url-repository": "RHOAI-Build-Config",
+            "test.appstudio.openshift.io/pipelinerunstarttime": "1725530898",
+            "test.appstudio.openshift.io/source-repo-url": "https://github.com/red-hat-data-services/RHOAI-Build-Config",
+            "test.appstudio.openshift.io/status": "[{\"scenario\":\"rhoai-operator-enterprise-contract\",\"status\":\"TestFail\",\"lastUpdateTime\":\"2024-09-05T10:17:41.985313696Z\",\"details\":\"Integration test failed\",\"startTime\":\"2024-09-05T10:17:10.517901Z\",\"completionTime\":\"2024-09-05T10:17:41.985313696Z\",\"testPipelineRunName\":\"rhoai-operator-jjwcz-hq6kz\"}]"
+        },
+        "creationTimestamp": "2024-09-05T10:17:10Z",
+        "generateName": "rhoai-operator-",
+        "generation": 1,
+        "labels": {
+            "appstudio.openshift.io/application": "rhoai-operator",
+            "appstudio.openshift.io/build-pipelinerun": "rhoai-fbc-v2-13-on-push-7gm2b",
+            "appstudio.openshift.io/component": "rhoai-fbc-v2-13",
+            "pac.test.appstudio.openshift.io/check-run-id": "29719917235",
+            "pac.test.appstudio.openshift.io/event-type": "push",
+            "pac.test.appstudio.openshift.io/original-prname": "rhoai-fbc-v2-13-on-push",
+            "pac.test.appstudio.openshift.io/repository": "rhoai-fbc-component-v4-13",
+            "pac.test.appstudio.openshift.io/sha": "4391de0735674bb6bb26116c961cc91e4d54db8b",
+            "pac.test.appstudio.openshift.io/state": "completed",
+            "pac.test.appstudio.openshift.io/url-org": "red-hat-data-services",
+            "pac.test.appstudio.openshift.io/url-repository": "RHOAI-Build-Config",
+            "test.appstudio.openshift.io/pipelinerunfinishtime": "1725531427",
+            "test.appstudio.openshift.io/type": "component"
+        },
+        "name": "rhoai-operator-jjwcz",
+        "namespace": "rhoai-tenant",
+        "ownerReferences": [
+            {
+                "apiVersion": "appstudio.redhat.com/v1alpha1",
+                "blockOwnerDeletion": true,
+                "controller": true,
+                "kind": "Application",
+                "name": "rhoai-operator",
+                "uid": "1e861f2c-b473-4e55-97a3-6c8ee30d4f12"
+            }
+        ],
+        "resourceVersion": "2242497388",
+        "uid": "02b176f1-5e34-473c-8d8e-3bcd75241191"
+    },
+    "spec": {
+        "application": "rhoai-operator",
+        "artifacts": {},
+        "components": [
+            {
+                "containerImage": "quay.io/redhat-user-workloads/rhoai-tenant/rhoai-operator/rhoai-fbc-v2-13@sha256:92e8a786df12413e3aed4d93f2d0e586382b1a8ea413d2c10f36e28d9c254159",
+                "name": "rhoai-fbc-v2-13",
+                "source": {
+                    "git": {
+                        "revision": "4391de0735674bb6bb26116c961cc91e4d54db8b",
+                        "url": "https://github.com/red-hat-data-services/RHOAI-Build-Config"
+                    }
+                }
+            },
+            {
+                "containerImage": "quay.io/redhat-user-workloads/rhoai-tenant/rhoai-operator/rhoai-operator-bundle-v2-13@sha256:63cc4b958859340037cc5d633e69ab93bee37f1b9116b0ae6c59e9e41f5a2b12",
+                "name": "rhoai-operator-bundle-v2-13",
+                "source": {
+                    "git": {
+                        "dockerfileUrl": "bundle/Dockerfile",
+                        "revision": "4391de0735674bb6bb26116c961cc91e4d54db8b",
+                        "url": "https://github.com/red-hat-data-services/RHOAI-Build-Config.git"
+                    }
+                }
+            },
+            {
+                "containerImage": "quay.io/redhat-user-workloads/rhoai-tenant/rhoai-operator/rhods-operator-v-2-12@sha256:fd1fc5189f5a0b2b67ace0f7f55f38c1eb45b14b5df299ca42692d042772951a",
+                "name": "rhods-operator-v-2-12",
+                "source": {
+                    "git": {
+                        "dockerfileUrl": "Dockerfiles/Dockerfile",
+                        "revision": "001ca3ccb3f6264457ca6c6ffaa0fa77fc03a100",
+                        "url": "https://github.com/rhoai-rhtap/rhods-operator"
+                    }
+                }
+            }
+        ]
+    },
+    "status": {
+        "conditions": [
+            {
+                "lastTransitionTime": "2024-09-05T10:17:10Z",
+                "message": "The Snapshot's component(s) was/were added to the global candidate list",
+                "reason": "Added",
+                "status": "True",
+                "type": "AddedToGlobalCandidateList"
+            },
+            {
+                "lastTransitionTime": "2024-09-05T10:17:41Z",
+                "message": "Snapshot integration status condition is finished since all testing pipelines completed",
+                "reason": "Finished",
+                "status": "True",
+                "type": "AppStudioIntegrationStatus"
+            },
+            {
+                "lastTransitionTime": "2024-09-05T10:17:42Z",
+                "message": "Some Integration pipeline tests failed",
+                "reason": "Failed",
+                "status": "False",
+                "type": "AppStudioTestSucceeded"
+            }
+        ]
+    }
+}

@@ -61,10 +61,19 @@ def str_presenter(dumper, data):
         return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
     return dumper.represent_scalar('tag:yaml.org,2002:str', data)
 class snapshot_processor:
-    def __init__(self, snapshot_json_path:str, output_file_path:str, images_filter:dict={}):
+    def __init__(self, snapshot_json_path:str, output_file_path:str, image_filter:str=''):
         self.snapshot_json_path = snapshot_json_path
         self.output_file_path = output_file_path
-        self.images_filter = images_filter
+        self.image_filter = image_filter
+
+    def extract_images_from_snapshot(self):
+        snapshot = json.load(open(self.snapshot_json_path))
+        output_images = []
+        for component in snapshot['spec']['components']:
+            output_images.append({'name': component['name'], 'imageUri': component['containerImage']})
+
+        json.dump(output_images, indent=4, fp=open(self.output_file_path, 'w'))
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -79,6 +88,8 @@ if __name__ == '__main__':
                         help='Path of the single-bundle generated using the opm.', dest='output_file_path')
     parser.add_argument('-sn', '--snapshot-json-path', required=False,
                         help='Path of the single-bundle generated using the opm.', dest='snapshot_json_path')
+    parser.add_argument('-f', '--image-filter', required=False,
+                        help='Path of the single-bundle generated using the opm.', dest='image_filter')
     args = parser.parse_args()
 
     if args.operation.lower() == 'catalog-patch':
@@ -89,3 +100,5 @@ if __name__ == '__main__':
         # o = 'output.yaml'
         # processor = fbc_processor(catalog_yaml_path=c, patch_yaml_path=p, single_bundle_path=s, output_file_path=o)
         processor.patch_catalog_yaml()
+    elif args.operation.lower() == 'extract-snapshot-images':
+        processor = snapshot_processor(snapshot_json_path=args.snapshot_json_path, output_file_path=args.output_file_path, image_filter=args.image_filter)

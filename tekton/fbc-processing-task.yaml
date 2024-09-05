@@ -84,21 +84,19 @@ spec:
           API_SERVER="https://api.stone-prod-p02.hjvn.p1.openshiftapps.com:6443"
         fi
         
-        
-        
         echo "API_SERVER = ${API_SERVER}"
-        
         oc login --token="${OC_TOKEN}" --server=${API_SERVER}
-        
         echo "pipelinerun = ${PIPELINERUN_NAME}"
         oc get pipelinerun ${PIPELINERUN_NAME}
         APPLICATION_NAME=$(oc get pipelineruns -n rhoai-tenant ${PIPELINERUN_NAME} -o json | jq -r '.metadata.labels."appstudio.openshift.io/application"')
         echo "APPLICATION_NAME = $APPLICATION_NAME"
+        
+        SNAPSHOT_JSON_PATH=utils/snapshot.json
         LATEST_SNAPSHOT=$(oc get snapshots -l "pac.test.appstudio.openshift.io/event-type in (push, Push),appstudio.openshift.io/application=${APPLICATION_NAME}" --sort-by=.metadata.creationTimestamp | tail -1 | awk '{print $1}')
         echo "LATEST_SNAPSHOT = ${LATEST_SNAPSHOT}"
-        
+        oc get snapshots ${LATEST_SNAPSHOT} -o json > ${SNAPSHOT_JSON_PATH}
         echo "component-suffix = $COMPONENT_SUFFIX"
-        
+        python3 utils/utils/fbc-processor/fbc-processor.py -op extract-snapshot-images -sn ${SNAPSHOT_JSON_PATH} -o utils/snapshot_images.json
         
         
         #Invoke the FBC processor
