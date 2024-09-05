@@ -60,16 +60,22 @@ def str_presenter(dumper, data):
     if data.count('\n') > 0:
         return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
     return dumper.represent_scalar('tag:yaml.org,2002:str', data)
+class snapshot_processor:
+    def __init__(self):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--catalog-yaml-path', required=True,
+    parser.add_argument('-op', '--operation', required=False,
+                        help='Operation code, supported values are "catalog-patch" and "extract-snapshot-images"', dest='operation')
+    parser.add_argument('-c', '--catalog-yaml-path', required=False,
                         help='Path of the catalog.yaml from the main branch.', dest='catalog_yaml_path')
-    parser.add_argument('-p', '--patch-yaml-path', required=True, help='Path of the catalog-patch.yaml from the release branch.', dest='patch_yaml_path')
-    parser.add_argument('-s', '--single-bundle-path', required=True,
+    parser.add_argument('-p', '--patch-yaml-path', required=False, help='Path of the catalog-patch.yaml from the release branch.', dest='patch_yaml_path')
+    parser.add_argument('-s', '--single-bundle-path', required=False,
                         help='Path of the single-bundle generated using the opm.', dest='single_bundle_path')
-    parser.add_argument('-o', '--output-catalog-path', required=True,
+    parser.add_argument('-o', '--output-catalog-path', required=False,
                         help='Path of the single-bundle generated using the opm.', dest='output_catalog_path')
+    parser.add_argument('-sn', '--snapshot-json-path', required=False,
+                        help='Path of the single-bundle generated using the opm.', dest='snapshot-json-path')
     args = parser.parse_args()
     processor = fbc_processor(catalog_yaml_path=args.catalog_yaml_path, patch_yaml_path=args.patch_yaml_path, single_bundle_path=args.single_bundle_path, output_catalog_path=args.output_catalog_path)
     # c = '/home/dchouras/RHODS/DevOps/FBC/main/catalog/v4.13/rhods-operator/catalog.yaml'

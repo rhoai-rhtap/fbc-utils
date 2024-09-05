@@ -108,6 +108,8 @@ spec:
         
         #Push the changes to the release branch
         cd $(params.branch)
+        git config --global user.email "openshift-ai-devops@redhat.com"
+        git config --global user.name "Openshift-AI DevOps"
         git add .
         git status
         git commit -m "updating the latest FBC catalog.yaml to the release branch"
