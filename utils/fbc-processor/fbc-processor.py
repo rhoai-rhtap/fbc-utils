@@ -5,11 +5,11 @@ import yaml
 import json
 from collections import defaultdict
 class fbc_processor:
-    def __init__(self, catalog_yaml_path:str, patch_yaml_path:str, single_bundle_path:str, output_catalog_path:str):
+    def __init__(self, catalog_yaml_path:str, patch_yaml_path:str, single_bundle_path:str, output_file_path:str):
         self.catalog_yaml_path = catalog_yaml_path
         self.patch_yaml_path = patch_yaml_path
         self.single_bundle_path = single_bundle_path
-        self.output_catalog_path = output_catalog_path
+        self.output_file_path = output_file_path
         self.catalog_dict:defaultdict = self.parse_catalog_yaml()
         self.patch_dict = self.parse_patch_yaml()
 
@@ -35,7 +35,7 @@ class fbc_processor:
         docs = [doc for schema, schema_val in self.catalog_dict.items() for name, doc in schema_val.items()]
         yaml.add_representer(str, str_presenter)
         yaml.representer.SafeRepresenter.add_representer(str, str_presenter)
-        yaml.safe_dump_all(docs, open(self.output_catalog_path, 'w'))
+        yaml.safe_dump_all(docs, open(self.output_file_path, 'w'))
 
 
     def patch_olm_package(self):
@@ -61,7 +61,10 @@ def str_presenter(dumper, data):
         return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
     return dumper.represent_scalar('tag:yaml.org,2002:str', data)
 class snapshot_processor:
-    def __init__(self):
+    def __init__(self, snapshot_json_path:str, output_file_path:str, images_filter:dict={}):
+        self.snapshot_json_path = snapshot_json_path
+        self.output_file_path = output_file_path
+        self.images_filter = images_filter
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -72,15 +75,17 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--patch-yaml-path', required=False, help='Path of the catalog-patch.yaml from the release branch.', dest='patch_yaml_path')
     parser.add_argument('-s', '--single-bundle-path', required=False,
                         help='Path of the single-bundle generated using the opm.', dest='single_bundle_path')
-    parser.add_argument('-o', '--output-catalog-path', required=False,
-                        help='Path of the single-bundle generated using the opm.', dest='output_catalog_path')
+    parser.add_argument('-o', '--output-file-path', required=False,
+                        help='Path of the single-bundle generated using the opm.', dest='output_file_path')
     parser.add_argument('-sn', '--snapshot-json-path', required=False,
-                        help='Path of the single-bundle generated using the opm.', dest='snapshot-json-path')
+                        help='Path of the single-bundle generated using the opm.', dest='snapshot_json_path')
     args = parser.parse_args()
-    processor = fbc_processor(catalog_yaml_path=args.catalog_yaml_path, patch_yaml_path=args.patch_yaml_path, single_bundle_path=args.single_bundle_path, output_catalog_path=args.output_catalog_path)
-    # c = '/home/dchouras/RHODS/DevOps/FBC/main/catalog/v4.13/rhods-operator/catalog.yaml'
-    # p = '/home/dchouras/RHODS/DevOps/FBC/rhoai-2.13/catalog/catalog-patch.yaml'
-    # s = ''
-    # o = 'output.yaml'
-    # processor = fbc_processor(catalog_yaml_path=c, patch_yaml_path=p, single_bundle_path=s, output_catalog_path=o)
-    processor.patch_catalog_yaml()
+
+    if args.operation.lower() == 'catalog-patch':
+        processor = fbc_processor(catalog_yaml_path=args.catalog_yaml_path, patch_yaml_path=args.patch_yaml_path, single_bundle_path=args.single_bundle_path, output_file_path=args.output_file_path)
+        # c = '/home/dchouras/RHODS/DevOps/FBC/main/catalog/v4.13/rhods-operator/catalog.yaml'
+        # p = '/home/dchouras/RHODS/DevOps/FBC/rhoai-2.13/catalog/catalog-patch.yaml'
+        # s = ''
+        # o = 'output.yaml'
+        # processor = fbc_processor(catalog_yaml_path=c, patch_yaml_path=p, single_bundle_path=s, output_file_path=o)
+        processor.patch_catalog_yaml()
