@@ -102,3 +102,4 @@ if __name__ == '__main__':
         processor.patch_catalog_yaml()
     elif args.operation.lower() == 'extract-snapshot-images':
         processor = snapshot_processor(snapshot_json_path=args.snapshot_json_path, output_file_path=args.output_file_path, image_filter=args.image_filter)
+        processor.extract_images_from_snapshot()
