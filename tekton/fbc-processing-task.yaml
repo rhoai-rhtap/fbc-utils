@@ -107,8 +107,8 @@ spec:
         cat ${OUTPUT_CATALOG_PATH}
         
         #Push the changes to the release branch
-        #cd $(params.branch)
-        #git add .
-        #git status
-        #git commit -m "updating the latest FBC catalog.yaml to the release branch"
-        #git push -u origin $(params.branch)
+        cd $(params.branch)
+        git add .
+        git status
+        git commit -m "updating the latest FBC catalog.yaml to the release branch"
+        git push -u origin $(params.branch)
