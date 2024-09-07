@@ -100,6 +100,19 @@ spec:
         python3 utils/utils/fbc-processor/fbc-processor.py -op extract-snapshot-images -sn ${SNAPSHOT_JSON_PATH} -o utils/snapshot_images.json
         LATEST_BUNDLE_IMAGE=$(cat utils/snapshot_images.json | jq -r '.[]   | select(.name == "${OPERATOR_BUNDLE_COMPONENT_NAME}") | .imageUri')
         echo "LATEST_BUNDLE_IMAGE = $LATEST_BUNDLE_IMAGE"
+        yq e -i '.stable.bundles[0].image = "$LATEST_BUNDLE_IMAGE"' utils/fbc-processor/fbc-semver-template.yaml
+        opm alpha render-template semver -o yaml utils/fbc-processor/fbc-semver-template.yaml > utils/single_bundle_catalog_semver.yaml
+        
+        #Setup OPM Cli
+        os="$(uname -s | tr '[:upper:]' '[:lower:]')"
+        arch="$(uname -m | sed 's/x86_64/amd64/')"
+        opm_version="v1.27.1"
+        opm_filename="opm-$opm_version"
+        echo "-> Downloading opm" >&2
+        curl -sSfLo "$opm_filename" "https://github.com/operator-framework/operator-registry/releases/download/$opm_version/$os-$arch-opm"
+        chmod +x "$opm_filename"
+        ln -fs "$opm_filename" opm
+        opm alpha render-template semver -o yaml utils/fbc-processor/fbc-semver-template.yaml > utils/single_bundle_catalog_semver.yaml
         
         #Invoke the FBC processor
         pip install -r utils/utils/fbc-processor/requirements.txt
@@ -114,3 +127,5 @@ spec:
         git status
         git commit -m "updating the latest FBC catalog.yaml to the release branch"
         git push -u origin $(params.branch)
+utils/fbc-processor/fbc-semver-template:
+  yaml:
