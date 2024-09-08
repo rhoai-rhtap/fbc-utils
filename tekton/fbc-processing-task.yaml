@@ -47,6 +47,7 @@ spec:
         OPERATOR_BUNDLE_COMPONENT_NAME=rhoai-operator-bundle-${COMPONENT_SUFFIX}
         RBC_REPO_URL="github.com/red-hat-data-services/RHOAI-Build-Config.git"
         UTILS_REPO_URL="github.com/rhoai-rhtap/fbc-utils.git"
+        BUILD_CONFIG_PATH=utils/build-config.yaml
         
         OC_TOKEN=$(echo $OC_TOKEN | awk '{$1=$1};1' | tr -d '\n')
         GH_USER=$(echo $GH_USER | awk '{$1=$1};1' | tr -d '\n')
@@ -67,7 +68,7 @@ spec:
         #Declare FBC processing variables
         CATALOG_YAML_PATH=main/catalog/${OPENSHIFT_VERSION}/rhods-operator/catalog.yaml
         PATCH_YAML_PATH=$(params.branch)/catalog/catalog-patch.yaml
-        SINGLE_BUNDLE_PATH=latest_bundle.yaml
+        SINGLE_BUNDLE_PATH=utils/single_bundle_catalog_semver.yaml
         OUTPUT_CATALOG_PATH=$(params.branch)/catalog/${OPENSHIFT_VERSION}/rhods-operator/catalog.yaml
         
         #Generate the catalog for the latest bundle
@@ -101,7 +102,7 @@ spec:
         LATEST_BUNDLE_IMAGE=$(cat utils/snapshot_images.json | jq -r '.[]   | select(.name == "${OPERATOR_BUNDLE_COMPONENT_NAME}") | .imageUri')
         echo "LATEST_BUNDLE_IMAGE = $LATEST_BUNDLE_IMAGE"
         yq e -i '.stable.bundles[0].image = "$LATEST_BUNDLE_IMAGE"' utils/fbc-processor/fbc-semver-template.yaml
-        opm alpha render-template semver -o yaml utils/fbc-processor/fbc-semver-template.yaml > utils/single_bundle_catalog_semver.yaml
+        opm alpha render-template semver -o yaml utils/fbc-processor/fbc-semver-template.yaml > ${SINGLE_BUNDLE_PATH}
         
         #Setup OPM Cli
         os="$(uname -s | tr '[:upper:]' '[:lower:]')"

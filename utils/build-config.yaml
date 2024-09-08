@@ -1,0 +1,5 @@
+config:
+  replacements:
+    - registry: quay.io
+      repo_mappings:
+        redhat-user-workloads/rhoai-tenant/rhoai-operator/rhoai-operator-bundle-v2-13: rhoai/odh-operator-bundle
