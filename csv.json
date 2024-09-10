@@ -22,7 +22,7 @@
       "odh-ml-pipeline-envoy-proxy-image": "registry.redhat.io/openshift-service-mesh/proxyv2-rhel8@sha256:a744c1b386fd5e4f94e43543e829df1bfdd1b564137917372a11da06872f4bcb",
       "odh-ml-pipeline-mariadb-image": "registry.redhat.io/rhel8/mariadb-103@sha256:3d30992e60774f887c4e7959c81b0c41b0d82d042250b3b56f05ab67fd4cdee1",
       "odh-ml-pipeline-moveresult-image": "registry.redhat.io/ubi8/ubi-micro@sha256:396baed3d689157d96aa7d8988fdfea7eb36684c8335eb391cf1952573e689c1",
-      "olm.skipRange": "\u003e=2.11.0 \u003c2.12.0",
+      "olm.skipRange": ">=2.11.0 <2.12.0",
       "operatorframework.io/initialization-resource": "{\n  \"apiVersion\": \"datasciencecluster.opendatahub.io/v1\",\n  \"kind\": \"DataScienceCluster\",\n  \"metadata\": {\n    \"name\": \"default-dsc\",\n    \"labels\": {\n      \"app.kubernetes.io/name\": \"datasciencecluster\",\n      \"app.kubernetes.io/instance\": \"default-dsc\",\n      \"app.kubernetes.io/part-of\": \"rhods-operator\",\n      \"app.kubernetes.io/managed-by\": \"kustomize\",\n      \"app.kubernetes.io/created-by\": \"rhods-operator\"\n    }\n  },\n  \"spec\": {\n    \"components\": {\n      \"codeflare\": {\n        \"managementState\": \"Managed\"\n      },\n      \"dashboard\": {\n        \"managementState\": \"Managed\"\n      },\n      \"datasciencepipelines\": {\n        \"managementState\": \"Managed\"\n      },\n      \"kserve\": {\n        \"managementState\": \"Managed\",\n        \"serving\": {\n          \"ingressGateway\": {\n            \"certificate\": {\n              \"type\": \"OpenshiftDefaultIngress\"\n            }\n          },\n          \"managementState\": \"Managed\",\n          \"name\": \"knative-serving\"\n        }\n      },\n      \"kueue\": {\n        \"managementState\": \"Managed\"\n      },\n      \"modelmeshserving\": {\n        \"managementState\": \"Managed\"\n      },\n      \"ray\": {\n        \"managementState\": \"Managed\"\n      },\n      \"trainingoperator\": {\n        \"managementState\": \"Removed\"\n      },\n      \"trustyai\": {\n        \"managementState\": \"Removed\"\n      },\n      \"workbenches\": {\n        \"managementState\": \"Managed\"\n      }\n    }\n  }\n}",
       "operatorframework.io/suggested-namespace": "redhat-ods-operator",
       "operators.openshift.io/infrastructure-features": "[\"disconnected\"]",
@@ -2313,7 +2313,7 @@
                         },
                         {
                           "name": "RELATED_IMAGE_ODH_DASHBOARD_IMAGE",
-                          "value": "registry-proxy.engineering.redhat.com/rh-osbs/managed-open-data-hub-odh-dashboard-rhel8:v2.12.0-12"
+                          "value": "registry.redhat.io/rhoai/odh-dashboard-rhel8:v2.12.0-12"
                         },
                         {
                           "name": "RELATED_IMAGE_ODH_KF_NOTEBOOK_CONTROLLER_IMAGE",

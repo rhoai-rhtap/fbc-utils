@@ -93,6 +93,25 @@ spec:
         APPLICATION_NAME=$(oc get pipelineruns -n rhoai-tenant ${PIPELINERUN_NAME} -o json | jq -r '.metadata.labels."appstudio.openshift.io/application"')
         echo "APPLICATION_NAME = $APPLICATION_NAME"
         
+        #Setup yq & OPM Cli
+        os="$(uname -s | tr '[:upper:]' '[:lower:]')"
+        arch="$(uname -m | sed 's/x86_64/amd64/')"
+        yq_version="v4.44.3"
+        yq_filename="yq-$yq_version"
+        echo "-> Downloading yq" >&2
+        curl -sSfLo "$yq_filename" "https://github.com/mikefarah/yq/releases/download/$yq_version/yq_${os}_${arch}"
+        chmod +x $yq_filename
+        ln -s $yq_filename yq
+        cp $yq_filename /usr/local/bin/yq
+
+        opm_version="v1.27.1"
+        opm_filename="opm-$opm_version"
+        echo "-> Downloading opm" >&2
+        curl -sSfLo "$opm_filename" "https://github.com/operator-framework/operator-registry/releases/download/$opm_version/$os-$arch-opm"
+        chmod +x "$opm_filename"
+        ln -fs "$opm_filename" opm
+        cp "$opm_filename" /usr/local/bin/opm
+        
         SNAPSHOT_JSON_PATH=utils/snapshot.json
         LATEST_SNAPSHOT=$(oc get snapshots -l "pac.test.appstudio.openshift.io/event-type in (push, Push),appstudio.openshift.io/application=${APPLICATION_NAME}" --sort-by=.metadata.creationTimestamp | tail -1 | awk '{print $1}')
         echo "LATEST_SNAPSHOT = ${LATEST_SNAPSHOT}"
@@ -101,19 +120,9 @@ spec:
         python3 utils/utils/fbc-processor/fbc-processor.py -op extract-snapshot-images -sn ${SNAPSHOT_JSON_PATH} -o utils/snapshot_images.json
         LATEST_BUNDLE_IMAGE=$(cat utils/snapshot_images.json | jq -r '.[]   | select(.name == "${OPERATOR_BUNDLE_COMPONENT_NAME}") | .imageUri')
         echo "LATEST_BUNDLE_IMAGE = $LATEST_BUNDLE_IMAGE"
-        yq e -i '.stable.bundles[0].image = "$LATEST_BUNDLE_IMAGE"' utils/fbc-processor/fbc-semver-template.yaml
-        opm alpha render-template semver -o yaml utils/fbc-processor/fbc-semver-template.yaml > ${SINGLE_BUNDLE_PATH}
+        yq e -i '.stable.bundles[0].image = "$LATEST_BUNDLE_IMAGE"' utils/utils/fbc-processor/fbc-semver-template.yaml
+        opm alpha render-template semver -o yaml utils/utils/fbc-processor/fbc-semver-template.yaml > ${SINGLE_BUNDLE_PATH}
         
-        #Setup OPM Cli
-        os="$(uname -s | tr '[:upper:]' '[:lower:]')"
-        arch="$(uname -m | sed 's/x86_64/amd64/')"
-        opm_version="v1.27.1"
-        opm_filename="opm-$opm_version"
-        echo "-> Downloading opm" >&2
-        curl -sSfLo "$opm_filename" "https://github.com/operator-framework/operator-registry/releases/download/$opm_version/$os-$arch-opm"
-        chmod +x "$opm_filename"
-        ln -fs "$opm_filename" opm
-        opm alpha render-template semver -o yaml utils/fbc-processor/fbc-semver-template.yaml > utils/single_bundle_catalog_semver.yaml
         
         #Invoke the FBC processor
         pip install -r utils/utils/fbc-processor/requirements.txt

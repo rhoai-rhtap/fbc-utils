@@ -15,7 +15,7 @@ class fbc_processor:
         self.output_file_path = output_file_path
         self.catalog_dict:defaultdict = self.parse_catalog_yaml()
         self.patch_dict = self.parse_patch_yaml()
-        self.build_config = json.load(open(self.build_config_path))
+        self.build_config = yaml.safe_load(open(self.build_config_path))
         self.current_olm_bundle = self.parse_single_bundle_catalog()
 
     def parse_catalog_yaml(self):
@@ -42,6 +42,7 @@ class fbc_processor:
             self.patch_olm_package()
         if 'olm.channels' in self.patch_dict['patch']:
             self.patch_olm_channels()
+        self.patch_olm_bundles()
 
         self.write_output_catalog()
 
@@ -70,12 +71,13 @@ class fbc_processor:
     def apply_replacements_to_catalog(self, olm_bundle):
         olm_bundle['image'] = self.apply_replacement(olm_bundle['image'])
 
-        for relatedImage in olm_bundle['image']:
+        for relatedImage in olm_bundle['relatedImages']:
             relatedImage['image'] = self.apply_replacement(relatedImage['image'])
 
         for property in olm_bundle['properties']:
             if property['type'] == 'olm.bundle.object':
                 property['value']['data'] = self.apply_replacemenmt_to_olm_bundle_object(property['value']['data'])
+        return olm_bundle
 
 
     def apply_replacemenmt_to_olm_bundle_object(self, encoded_object:str):
@@ -87,8 +89,12 @@ class fbc_processor:
             bundle_object['spec']['install']['spec']['deployments'][0]['spec']['template']['spec']['containers'][0][
                 'env']
             for env in envs:
-                env['value'] = self.apply_replacement(env['value'])
-            encoded_output = base64.b64encode(json.dumps(bundle_object).encode())
+                if 'value' in env:
+                    env['value'] = self.apply_replacement(env['value'])
+            encoded_output = base64.b64encode(json.dumps(bundle_object).encode()).decode('utf-8')
+            encoded_output = encoded_output.replace('\n', '')
+
+        return encoded_output
 
 
 
@@ -96,7 +102,7 @@ class fbc_processor:
         if value:
             for replacement in self.build_config['config']['replacements']:
                 intermediate_registry = replacement['registry']
-                for old, new in replacement['repo_mappings']:
+                for old, new in replacement['repo_mappings'].items():
                     value = value.replace(f'{intermediate_registry}/{old}@', f'{self.PRODUCTION_REGISTRY}/{new}@')
         return value
 
@@ -153,12 +159,15 @@ if __name__ == '__main__':
 
     if args.operation.lower() == 'catalog-patch':
         processor = fbc_processor(build_config_path=args.build_config_path, catalog_yaml_path=args.catalog_yaml_path, patch_yaml_path=args.patch_yaml_path, single_bundle_path=args.single_bundle_path, output_file_path=args.output_file_path)
-        # c = '/home/dchouras/RHODS/DevOps/FBC/main/catalog/v4.13/rhods-operator/catalog.yaml'
-        # p = '/home/dchouras/RHODS/DevOps/FBC/rhoai-2.13/catalog/catalog-patch.yaml'
-        # s = ''
-        # o = 'output.yaml'
-        # processor = fbc_processor(catalog_yaml_path=c, patch_yaml_path=p, single_bundle_path=s, output_file_path=o)
         processor.patch_catalog_yaml()
     elif args.operation.lower() == 'extract-snapshot-images':
         processor = snapshot_processor(snapshot_json_path=args.snapshot_json_path, output_file_path=args.output_file_path, image_filter=args.image_filter)
         processor.extract_images_from_snapshot()
+
+        # c = '/home/dchouras/RHODS/DevOps/FBC/main/catalog/v4.13/rhods-operator/catalog.yaml'
+        # p = '/home/dchouras/RHODS/DevOps/FBC/rhoai-2.13/catalog/catalog-patch.yaml'
+        # s = '/home/dchouras/RHODS/DevOps/FBC/fbc-utils/utils/single_bundle_catalog_semver.yaml'
+        # o = 'output.yaml'
+        # b = '/home/dchouras/RHODS/DevOps/FBC/fbc-utils/utils/build-config.yaml'
+        # processor = fbc_processor(build_config_path=b, catalog_yaml_path=c, patch_yaml_path=p, single_bundle_path=s, output_file_path=o)
+        # processor.patch_catalog_yaml()
