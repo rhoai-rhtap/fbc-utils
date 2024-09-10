@@ -137,5 +137,3 @@ spec:
         git status
         git commit -m "updating the latest FBC catalog.yaml to the release branch"
         git push -u origin $(params.branch)
-utils/fbc-processor/fbc-semver-template:
-  yaml:
