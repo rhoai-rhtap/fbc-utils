@@ -4,7 +4,9 @@ import argparse
 import yaml
 import json
 from collections import defaultdict
+import base64
 class fbc_processor:
+    PRODUCTION_REGISTRY = 'registry.redhat.io'
     def __init__(self, build_config_path:str, catalog_yaml_path:str, patch_yaml_path:str, single_bundle_path:str, output_file_path:str):
         self.build_config_path = build_config_path
         self.catalog_yaml_path = catalog_yaml_path
@@ -14,6 +16,7 @@ class fbc_processor:
         self.catalog_dict:defaultdict = self.parse_catalog_yaml()
         self.patch_dict = self.parse_patch_yaml()
         self.build_config = json.load(open(self.build_config_path))
+        self.current_olm_bundle = self.parse_single_bundle_catalog()
 
     def parse_catalog_yaml(self):
         objs = yaml.safe_load_all(open(self.catalog_yaml_path))
@@ -22,6 +25,15 @@ class fbc_processor:
         for obj in objs:
             catalog_dict[obj['schema']][obj['name']] = obj
         return catalog_dict
+
+    def parse_single_bundle_catalog(self):
+        objs = yaml.safe_load_all(open(self.single_bundle_path))
+        single_olm_bundle = None
+        for obj in objs:
+            if obj['schema'] == 'olm.bundle':
+                single_olm_bundle = obj
+                break
+        return single_olm_bundle
 
     def parse_patch_yaml(self):
         return yaml.safe_load(open(self.patch_yaml_path))
@@ -55,11 +67,51 @@ class fbc_processor:
             else:
                 self.catalog_dict[SCHEMA][channel['name']] = channel
 
-    def apply_replacements(self):
-        pass
-    def patch_olm_bundles(self):
-        pass
+    def apply_replacements_to_catalog(self, olm_bundle):
+        olm_bundle['image'] = self.apply_replacement(olm_bundle['image'])
 
+        for relatedImage in olm_bundle['image']:
+            relatedImage['image'] = self.apply_replacement(relatedImage['image'])
+
+        for property in olm_bundle['properties']:
+            if property['type'] == 'olm.bundle.object':
+                property['value']['data'] = self.apply_replacemenmt_to_olm_bundle_object(property['value']['data'])
+
+
+    def apply_replacemenmt_to_olm_bundle_object(self, encoded_object:str):
+        bundle_str:str = base64.b64decode(encoded_object).decode('utf-8')
+        bundle_object = json.loads(bundle_str)
+        encoded_output = encoded_object
+        if bundle_object['kind'] == 'ClusterServiceVersion':
+            envs = \
+            bundle_object['spec']['install']['spec']['deployments'][0]['spec']['template']['spec']['containers'][0][
+                'env']
+            for env in envs:
+                env['value'] = self.apply_replacement(env['value'])
+            encoded_output = base64.b64encode(json.dumps(bundle_object).encode())
+
+
+
+    def apply_replacement(self, value:str):
+        if value:
+            for replacement in self.build_config['config']['replacements']:
+                intermediate_registry = replacement['registry']
+                for old, new in replacement['repo_mappings']:
+                    value = value.replace(f'{intermediate_registry}/{old}@', f'{self.PRODUCTION_REGISTRY}/{new}@')
+        return value
+
+
+    def patch_olm_bundles(self):
+        SCHEMA = 'olm.bundle'
+        current_bundle_name = self.current_olm_bundle['name']
+        self.catalog_dict[SCHEMA][current_bundle_name] = self.apply_replacements_to_catalog(self.current_olm_bundle)
+        # apply replacements for bundle image Uri in catalog
+        # apply replacements for related images in the catalog
+        # replacement of the encoded bundle
+        # 1. decode the last "olm.bundle" object
+        # 2. apply the replacements for all the related images
+        # 3. encode the "olm.bundle" again
+        # 4. patch it with the catalog.yaml
 def str_presenter(dumper, data):
     if data.count('\n') > 0:
         return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')

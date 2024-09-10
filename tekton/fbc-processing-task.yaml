@@ -47,7 +47,6 @@ spec:
         OPERATOR_BUNDLE_COMPONENT_NAME=rhoai-operator-bundle-${COMPONENT_SUFFIX}
         RBC_REPO_URL="github.com/red-hat-data-services/RHOAI-Build-Config.git"
         UTILS_REPO_URL="github.com/rhoai-rhtap/fbc-utils.git"
-        BUILD_CONFIG_PATH=utils/build-config.yaml
         
         OC_TOKEN=$(echo $OC_TOKEN | awk '{$1=$1};1' | tr -d '\n')
         GH_USER=$(echo $GH_USER | awk '{$1=$1};1' | tr -d '\n')
@@ -66,6 +65,7 @@ spec:
         git clone "https://${GH_USER}:${GH_PAT}@${UTILS_REPO_URL}" utils
         
         #Declare FBC processing variables
+        BUILD_CONFIG_PATH=$(params.branch)/config/build-config.yaml
         CATALOG_YAML_PATH=main/catalog/${OPENSHIFT_VERSION}/rhods-operator/catalog.yaml
         PATCH_YAML_PATH=$(params.branch)/catalog/catalog-patch.yaml
         SINGLE_BUNDLE_PATH=utils/single_bundle_catalog_semver.yaml
@@ -117,7 +117,7 @@ spec:
         
         #Invoke the FBC processor
         pip install -r utils/utils/fbc-processor/requirements.txt
-        python3 utils/utils/fbc-processor/fbc-processor.py -op catalog-patch -c ${CATALOG_YAML_PATH} -p ${PATCH_YAML_PATH} -s ${SINGLE_BUNDLE_PATH} -o ${OUTPUT_CATALOG_PATH}
+        python3 utils/utils/fbc-processor/fbc-processor.py -op catalog-patch -b ${BUILD_CONFIG_PATH} -c ${CATALOG_YAML_PATH} -p ${PATCH_YAML_PATH} -s ${SINGLE_BUNDLE_PATH} -o ${OUTPUT_CATALOG_PATH}
         cat ${OUTPUT_CATALOG_PATH}
         
         #Push the changes to the release branch
