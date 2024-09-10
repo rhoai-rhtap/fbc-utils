@@ -121,6 +121,8 @@ spec:
         #Invoke the FBC processor to extract the snapshot images
         pip install -r utils/utils/fbc-processor/requirements.txt
         python3 utils/utils/fbc-processor/fbc-processor.py -op extract-snapshot-images -sn ${SNAPSHOT_JSON_PATH} -o utils/snapshot_images.json
+        cat ${SNAPSHOT_JSON_PATH}
+        echo "OPERATOR_BUNDLE_COMPONENT_NAME = $OPERATOR_BUNDLE_COMPONENT_NAME-"
         LATEST_BUNDLE_IMAGE=$(cat utils/snapshot_images.json | jq -r '.[]   | select(.name == "${OPERATOR_BUNDLE_COMPONENT_NAME}") | .imageUri')
         echo "LATEST_BUNDLE_IMAGE = $LATEST_BUNDLE_IMAGE"
         yq e -i '.stable.bundles[0].image = "$LATEST_BUNDLE_IMAGE"' utils/utils/fbc-processor/fbc-semver-template.yaml
