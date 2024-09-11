@@ -68,7 +68,7 @@ spec:
         BUILD_CONFIG_PATH=$(params.branch)/config/build-config.yaml
         CATALOG_YAML_PATH=main/catalog/${OPENSHIFT_VERSION}/rhods-operator/catalog.yaml
         PATCH_YAML_PATH=$(params.branch)/catalog/catalog-patch.yaml
-        SINGLE_BUNDLE_PATH=utils/single_bundle_catalog_semver.yaml
+        SINGLE_BUNDLE_PATH=utils/utils/single_bundle_catalog_semver.yaml
         OUTPUT_CATALOG_PATH=$(params.branch)/catalog/${OPENSHIFT_VERSION}/rhods-operator/catalog.yaml
         
         #Generate the catalog for the latest bundle
@@ -128,6 +128,7 @@ spec:
         echo "LATEST_BUNDLE_IMAGE = $LATEST_BUNDLE_IMAGE"
         yq e -i '.stable.bundles[0].image = "$LATEST_BUNDLE_IMAGE"' utils/utils/fbc-processor/fbc-semver-template.yaml
         LATEST_BUNDLE_IMAGE="$LATEST_BUNDLE_IMAGE" yq e -i '.stable.bundles[0].image = env(LATEST_BUNDLE_IMAGE)' utils/utils/fbc-processor/fbc-semver-template.yaml
+        opm alpha render-template semver -o yaml utils/utils/fbc-processor/fbc-semver-template.yaml > ${SINGLE_BUNDLE_PATH}
       
         #Invoke FBC processor to patch the catalog
         python3 utils/utils/fbc-processor/fbc-processor.py -op catalog-patch -b ${BUILD_CONFIG_PATH} -c ${CATALOG_YAML_PATH} -p ${PATCH_YAML_PATH} -s ${SINGLE_BUNDLE_PATH} -o ${OUTPUT_CATALOG_PATH}
