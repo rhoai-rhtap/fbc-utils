@@ -127,7 +127,7 @@ spec:
         LATEST_BUNDLE_IMAGE=$(jq --arg OPERATOR_BUNDLE_COMPONENT_NAME "$OPERATOR_BUNDLE_COMPONENT_NAME" -r '.[]   | select(.name == $OPERATOR_BUNDLE_COMPONENT_NAME) | .imageUri' utils/snapshot_images.json)
         echo "LATEST_BUNDLE_IMAGE = $LATEST_BUNDLE_IMAGE"
         yq e -i '.stable.bundles[0].image = "$LATEST_BUNDLE_IMAGE"' utils/utils/fbc-processor/fbc-semver-template.yaml
-        opm alpha render-template semver -o yaml utils/utils/fbc-processor/fbc-semver-template.yaml > ${SINGLE_BUNDLE_PATH}
+        LATEST_BUNDLE_IMAGE="$LATEST_BUNDLE_IMAGE" yq e -i '.stable.bundles[0].image = env(LATEST_BUNDLE_IMAGE)' utils/utils/fbc-processor/fbc-semver-template.yaml
       
         #Invoke FBC processor to patch the catalog
         python3 utils/utils/fbc-processor/fbc-processor.py -op catalog-patch -b ${BUILD_CONFIG_PATH} -c ${CATALOG_YAML_PATH} -p ${PATCH_YAML_PATH} -s ${SINGLE_BUNDLE_PATH} -o ${OUTPUT_CATALOG_PATH}
